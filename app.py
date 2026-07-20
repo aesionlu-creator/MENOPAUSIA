@@ -883,7 +883,7 @@ Dr. Ronald (Ginecología y Obstetricia) & Gemini AI`;
 """
 
 # Renderizar en la aplicación Streamlit
-components.html(html_code, height=1800, scrolling=True)import streamlit as st
+components.html(html_code, height=1800, scrolling=True)
 import streamlit.components.v1 as components
 
 # Configuración de página completa en Streamlit
