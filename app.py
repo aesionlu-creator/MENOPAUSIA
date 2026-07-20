@@ -1,4 +1,4 @@
-import streamlit
+import streamlit as st
 
 # Configuración de la página
 st.set_page_config(
@@ -370,4 +370,4 @@ else:
         elif score_desire > 3.3:
             st.info("ℹ️ **No Candidata a TDSH:** Subtotal de deseo > 3.3 (Deseo conservado).")
         else:
-            st.success("✅ **Candidata Apta para Testosterona:** Cumple criterios de TDSH (Deseo ≤ 3.3) sin dolor limitante. Solicitar laboratorios previos.")
+            st.success("✅ **Candidata Apta para Testosterona:** Cumple criterios de TDSH (Deseo ≤ 3.3) sin dolor limitante. Solicitar laboratorios previos.")V
