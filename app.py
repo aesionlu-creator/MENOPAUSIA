@@ -242,11 +242,24 @@ if modulo == "Protocolo Ronald v2.0 (Evaluación THM)":
             if "Endometriosis" in sitEspList or "Adenomiosis" in sitEspList:
                 recFinal += "\n* Antecedente de Endometriosis/Adenomiosis: Utilizar ESQUEMA COMBINADO CONTINUO o DIU Mirena."
 
+        # Marcadores limpios para evitar errores de sintaxis
+        m_som = "[X]" if domPred == "Somático" else "[ ]"
+        m_psi = "[X]" if domPred == "Psicológico" else "[ ]"
+        m_uro = "[X]" if domPred == "Urogenital" else "[ ]"
+        
+        a_som = analisisDom if domPred == "Somático" else "No prevalente."
+        a_psi = analisisDom if domPred == "Psicológico" else "No prevalente."
+        a_uro = analisisDom if domPred == "Urogenital" else "No prevalente."
+
+        nombre_p = nombre if nombre else 'No indicada'
+        sud_p = 'Sí' if sudor else 'No'
+        noc_p = 'Sí' if noche else 'No'
+
         informeTexto = f"""===========================================================
 INFORME DE EVALUACIÓN MENOPÁUSICA - Protocolo Ronald v2.0
 Desarrollo Clínico: Protocolo Ronald | Motor: Gemini AI
 ===========================================================
-Paciente: {nombre if nombre else 'No indicada'} | Edad: {edad} años | FUR: {fur}
+Paciente: {nombre_p} | Edad: {edad} años | FUR: {fur}
 Etapa: {etapa}
 
 1. ESCALA MRS COMPLETA
@@ -256,13 +269,13 @@ Etapa: {etapa}
    Puntaje TOTAL: {totalMRS}/40 → {interpTotalMRS}
 
 2. ANÁLISIS POR DOMINIO
-   {'[X]' if domPred == 'Somático' else '[ '] Somático predominante ({pctS}% del máx): {analisisDom if domPred == 'Somático' else 'No prevalente.'}
-   {'[X]' if domPred == 'Psicológico' else '[ '] Psicológico predominante ({pctP}% del máx): {analisisDom if domPred == 'Psicológico' else 'No prevalente.'}
-   {'[X]' if domPred == 'Urogenital' else '[ '] Urogenital predominante ({pctU}% del máx): {analisisDom if domPred == 'Urogenital' else 'No prevalente.'}
+   {m_som} Somático practical ({pctS}% del máx): {a_som}
+   {m_psi} Psicológico practical ({pctP}% del máx): {a_psi}
+   {m_uro} Urogenital practical ({pctU}% del máx): {a_uro}
 
 3. BOCHORNOS
    Episodios/día: {b_dia} | Impacto: {b_imp}/10
-   Sudoración: {'Sí' if sudor else 'No'} | Despierta noche: {'Sí' if noche else 'No'}
+   Sudoración: {sud_p} | Despierta noche: {noc_p}
 
 4. CONTRAINDICACIONES
    Absolutas: {absText}
@@ -370,4 +383,4 @@ else:
         elif score_desire > 3.3:
             st.info("ℹ️ **No Candidata a TDSH:** Subtotal de deseo > 3.3 (Deseo conservado).")
         else:
-            st.success("✅ **Candidata Apta para Testosterona:** Cumple criterios de TDSH (Deseo ≤ 3.3) sin dolor limitante. Solicitar laboratorios previos.")V
+            st.success("✅ **Candidata Apta para Testosterona:** Cumple criterios de TDSH (Deseo ≤ 3.3) sin dolor limitante. Solicitar laboratorios previos.")
