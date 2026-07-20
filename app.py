@@ -1,386 +1,577 @@
-import streamlit as st
-
-# Configuración de la página
-st.set_page_config(
-    page_title="Protocolo Ronald v2.0 - Suite Médica Menopausia",
-    page_icon="🩺",
-    layout="wide"
-)
-
-# Estilos personalizados
-st.markdown("""
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluador Clínico Completo FSFI - Dr. Ronald & Gemini AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería para generación de PDF en cliente -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-    .main-header {
-        background: linear-gradient(90deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-        padding: 20px;
-        border-radius: 12px;
-        color: white;
-        margin-bottom: 25px;
-    }
-    .sub-text {
-        font-size: 0.85rem;
-        color: #cbd5e1;
-    }
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
-""", unsafe_allow_html=True)
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
 
-# Menú lateral para seleccionar la herramienta
-st.sidebar.title("🩺 Panel Médico")
-modulo = st.sidebar.radio(
-    "Seleccione el módulo clínico:",
-    ["Protocolo Ronald v2.0 (Evaluación THM)", "Índice FSFI (Función Sexual / TDSH)"]
-)
-
-st.sidebar.markdown("---")
-st.sidebar.caption("Dr. Ronald - Ginecología y Obstetricia")
-st.sidebar.caption("Powered by Gemini AI Collaborator (2026)")
-
-# ==========================================
-# MÓDULO 1: PROTOCOLO RONALD v2.0 (THM)
-# ==========================================
-if modulo == "Protocolo Ronald v2.0 (Evaluación THM)":
-    
-    st.markdown("""
-        <div class="main-header">
-            <span style="background-color: #4f46e5; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">v2.0 Actualizada</span>
-            <h1 style="margin: 5px 0 0 0; font-size: 24px;">PROTOCOLO RONALD v2.0</h1>
-            <p class="sub-text">Evaluación Clínica Digitalizada de Terapia Hormonal Menopáusica (THM)</p>
+    <div class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-teal-800 to-cyan-900 rounded-2xl p-6 md:p-8 text-white shadow-xl border border-teal-900/20 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <span class="bg-teal-500/30 text-teal-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cuestionario Oficial e Interactivo</span>
+                    <h1 class="text-3xl md:text-4xl font-extrabold mt-2 tracking-tight">Índice de Función Sexual Femenina (FSFI)</h1>
+                    <p class="text-teal-100 text-sm md:text-base mt-2 max-w-2xl">
+                        Evaluación científica autoadministrada de 19 ítems para el diagnóstico del TDSH y candidatura a terapia con Testosterona.
+                    </p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 text-xs text-left md:text-right shrink-0">
+                    <p class="font-medium text-teal-200 uppercase tracking-wider">Herramienta Clínica Diseñada por:</p>
+                    <p class="font-bold text-white text-base mt-0.5">Dr. Ronald</p>
+                    <p class="text-teal-100/70 text-xs">Ginecología y Obstetricia</p>
+                    <div class="border-t border-white/15 my-2"></div>
+                    <p class="text-teal-200 font-medium">Soporte Tecnológico:</p>
+                    <p class="font-semibold text-white">Gemini AI • 2026</p>
+                </div>
+            </div>
         </div>
-    """, unsafe_allow_html=True)
 
-    st.subheader("PASO 1: Confirmar Etapa Reproductiva")
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        nombre = st.text_input("Nombre Completo", placeholder="Nombre de la paciente")
-    with col2:
-        edad = st.number_input("Edad (Años)", min_value=18, max_value=100, value=52)
-    with col3:
-        fur = st.text_input("FUR (Fecha Última Regla)", placeholder="DD/MM/AAAA")
-    with col4:
-        etapa = st.selectbox("Etapa Reproductiva", [
-            "Premenopausia", "Perimenopausia", "Posmenopausia <10 años", "Posmenopausia ≥10 años"
-        ])
+        <!-- MAIN LAYOUT -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Clinical Criteria Checkboxes (Consenso Global 2019 + Seguridad) -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-teal-700 flex items-center gap-2">
+                        <span class="p-1 rounded-md bg-teal-50 text-teal-700">📋</span>
+                        1. Criterios Clínicos del Consenso Global 2019 y Seguridad
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-teal-500 cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-postmenopause" class="mt-1 h-5 w-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" checked>
+                            <span class="text-xs text-slate-700 leading-normal">La paciente es <strong>posmenopáusica</strong> (natural, quirúrgica o inducida).</span>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-teal-500 cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-distress" class="mt-1 h-5 w-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" checked>
+                            <span class="text-xs text-slate-700 leading-normal">La baja del deseo le genera un <strong>malestar o angustia clínicamente significativa</strong>.</span>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-teal-500 cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-mammo" class="mt-1 h-5 w-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" checked>
+                            <span class="text-xs text-slate-700 leading-normal">Cuenta con <strong>Mamografía vigente normal</strong> (&lt; 12 meses).</span>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-teal-500 cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-labs" class="mt-1 h-5 w-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" checked>
+                            <span class="text-xs text-slate-700 leading-normal">Perfil Hormonal Basal y Función Hepática evaluados.</span>
+                        </label>
+                    </div>
+                </div>
 
-    st.markdown("---")
-    st.subheader("PASO 2: Escala MRS Completa (Validada)")
-    st.caption("0 = Sin molestia | 4 = Muy severo")
+                <!-- Interactive Progress Bar -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+                    <div class="w-full bg-slate-100 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-teal-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <span id="progress-text" class="text-xs font-bold text-teal-800 whitespace-nowrap bg-teal-50 px-2.5 py-1 rounded-full">0 / 19 Respondidas</span>
+                </div>
 
-    col_s, col_p, col_u = st.columns(3)
+                <!-- Questions Container -->
+                <div id="questions-form" class="space-y-6"></div>
 
-    with col_s:
-        st.markdown("**Dominio Somático (Máx 16 pts)**")
-        s1 = st.selectbox("1. Bochornos / Sofocos", [0, 1, 2, 3, 4])
-        s2 = st.selectbox("2. Trastornos del sueño", [0, 1, 2, 3, 4])
-        s3 = st.selectbox("3. Dolores osteomusculares", [0, 1, 2, 3, 4])
-        s4 = st.selectbox("4. Cansancio / Fatiga", [0, 1, 2, 3, 4])
+            </div>
 
-    with col_p:
-        st.markdown("**Dominio Psicológico (Máx 12 pts)**")
-        p5 = st.selectbox("5. Depresión / Tristeza", [0, 1, 2, 3, 4])
-        p6 = st.selectbox("6. Irritabilidad / Mal humor", [0, 1, 2, 3, 4])
-        p7 = st.selectbox("7. Ansiedad / Tensión", [0, 1, 2, 3, 4])
+            <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-6">
+                
+                <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl border border-slate-800 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold uppercase tracking-widest text-teal-400">Análisis del FSFI en Tiempo Real</h2>
+                        <button onclick="resetAll()" class="text-xs text-slate-400 hover:text-white underline transition-colors">Reiniciar Test</button>
+                    </div>
 
-    with col_u:
-        st.markdown("**Dominio Urogenital (Máx 12 pts)**")
-        u8 = st.selectbox("8. Sequedad vaginal", [0, 1, 2, 3, 4])
-        u9 = st.selectbox("9. Disfunción sexual", [0, 1, 2, 3, 4])
-        u10 = st.selectbox("10. Síntomas urinarios", [0, 1, 2, 3, 4])
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-3">
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">1. Deseo</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.6</span>
+                                </div>
+                                <p id="score-desire" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-desire" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
 
-    st.markdown("---")
-    col_b, col_cx = st.columns(2)
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">2. Excitación</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.3</span>
+                                </div>
+                                <p id="score-arousal" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-arousal" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
 
-    with col_b:
-        st.subheader("PASO 3: Evaluación de Bochornos")
-        b_dia = st.number_input("Episodios / día", min_value=0, value=0)
-        b_imp = st.slider("Impacto (0 al 10)", 0, 10, 0)
-        
-        st.write("**Síntomas Asociados:**")
-        sudor = st.checkbox("Sudoración")
-        noche = st.checkbox("Despierta de noche")
-        act = st.checkbox("Interrumpe rutina")
-        ropa = st.checkbox("Cambia de ropa")
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">3. Lubricación</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.3</span>
+                                </div>
+                                <p id="score-lubrication" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-lubrication" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
 
-    with col_cx:
-        st.subheader("PASO 4: Contraindicaciones")
-        st.error("Marcar cualquiera detendrá la indicación de THM sistémica:")
-        cx1 = st.checkbox("Cáncer de mama (activo o previo)")
-        cx2 = st.checkbox("Sangrado uterino no estudiado")
-        cx3 = st.checkbox("TVP / TEP activa o reciente")
-        cx4 = st.checkbox("IAM / ACV / AIT reciente (< 6 meses)")
-        cx5 = st.checkbox("Enfermedad hepática grave descompensada")
-        cx6 = st.checkbox("Hiperplasia endometrial atípica no tratada")
-        cx_coronaria = st.checkbox("⚠️ Relativa: Enfermedad coronaria activa")
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">4. Orgasmo</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.4</span>
+                                </div>
+                                <p id="score-orgasm" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-orgasm" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
 
-    st.markdown("---")
-    st.subheader("PASO 5: Factores de Riesgo (Ponderados)")
-    col_rc, col_rt, col_rm = st.columns(3)
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">5. Satisfacción</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.4</span>
+                                </div>
+                                <p id="score-satisfaction" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-satisfaction" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
 
-    with col_rc:
-        st.markdown("**Cardiovascular**")
-        rc1 = st.checkbox("HTA no controlada (+2)", value=False)
-        rc2 = st.checkbox("Diabetes (+1)", value=False)
-        rc3 = st.checkbox("Dislipidemia (+1)", value=False)
-        rc4 = st.checkbox("IMC ≥ 30 (+2)", value=False)
-        rc5 = st.checkbox("Tabaquismo activo (+2)", value=False)
-        rc6 = st.checkbox("Enfermedad CV (+1)", value=False)
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">6. Dolor Coital</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.4</span>
+                                </div>
+                                <p id="score-pain" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-pain" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
+                    </div>
 
-    with col_rt:
-        st.markdown("**Tromboembólico**")
-        rt1 = st.checkbox("TVP / TEP previa (+3)", value=False)
-        rt2 = st.checkbox("Trombofilia conocida (+3)", value=False)
-        rt3 = st.checkbox("IMC ≥ 30 (+2)", key="rt_imc", value=False)
-        rt4 = st.checkbox("Várices importantes (+1)", value=False)
-        rt5 = st.checkbox("Fam. 1er grado Trombosis (+1)", value=False)
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                        <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">PUNTAJE GLOBAL FSFI</p>
+                        <p id="score-total" class="text-5xl font-extrabold text-white mt-1.5">0.00</p>
+                        <p class="text-[11px] text-teal-300 mt-1.5">Diagnóstico de Disfunción Sexual si es ≤ 26.55 puntos</p>
+                    </div>
 
-    with col_rm:
-        st.markdown("**Cáncer de Mama**")
-        rm1 = st.checkbox("Antecedente personal (+3)", value=False)
-        rm2 = st.checkbox("BRCA 1/2 (+3)", value=False)
-        rm3 = st.checkbox("Familiar 1er grado (+2)", value=False)
-        rm4 = st.checkbox("Hiperplasia atípica (+3)", key="rm_hip", value=False)
+                    <!-- Clinical Verdict Alert Box -->
+                    <div id="verdict-card" class="p-4 rounded-xl border text-center transition-all duration-300 bg-slate-800 text-slate-300 border-slate-700">
+                        <p class="text-xs uppercase tracking-wider font-bold" id="verdict-title">Evaluando Datos...</p>
+                        <p class="text-sm font-semibold mt-1" id="verdict-body">Por favor, complete las 19 preguntas del test.</p>
+                    </div>
+                </div>
 
-    st.markdown("---")
-    col_esp, col_pref = st.columns(2)
+                <!-- Clinical Note & Action Buttons -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                            <span>📝</span> Nota Clínica para Epicrisis
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="copyClinicalNote()" class="text-xs bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold px-2.5 py-1.5 rounded-lg border border-teal-200 flex items-center gap-1 transition-colors">
+                                <span>Copiar</span>
+                            </button>
+                            <button onclick="exportToPDF()" class="text-xs bg-slate-800 hover:bg-slate-900 text-white font-semibold px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors">
+                                <span>📄 PDF</span>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="clinical-note" rows="8" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[11px] font-mono text-slate-600 focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-text" readonly></textarea>
+                    <p id="copy-success-msg" class="text-xs text-emerald-600 font-semibold text-center hidden">¡Nota clínica copiada con éxito!</p>
+                </div>
 
-    with col_esp:
-        st.subheader("PASO 6: Individualización")
-        se_endo = st.checkbox("Endometriosis")
-        se_adeno = st.checkbox("Adenomiosis")
-        se_mio = st.checkbox("Miomas")
-        se_migrana = st.checkbox("Migraña con aura")
-        se_lupus = st.checkbox("Lupus")
-        se_art = st.checkbox("Artritis reumatoide")
-        se_osteo = st.checkbox("Osteoporosis")
-        se_precoz = st.checkbox("Menopausia precoz")
+            </div>
 
-    with col_pref:
-        st.subheader("PASO 7: Preferencia Paciente")
-        preferencia = st.selectbox("Deseo expreso de la paciente:", ["Desea THM", "No desea THM", "Indecisa"])
-
-    if st.button("🧙‍♂️ GENERAR INFORME CLÍNICO AUTOMÁTICO", type="primary", use_container_width=True):
-        somatico = s1 + s2 + s3 + s4
-        psicologico = p5 + p6 + p7
-        urogenital = u8 + u9 + u10
-        totalMRS = somatico + psicologico + urogenital
-
-        interpS = "Leve" if somatico <= 4 else ("Moderado" if somatico <= 8 else "Severo")
-        interpP = "Leve" if psicologico <= 3 else ("Moderado" if psicologico <= 6 else "Severo")
-        interpU = "Leve" if urogenital <= 3 else ("Moderado" if urogenital <= 6 else "Severo")
-
-        interpTotalMRS = "Leves"
-        if 9 <= totalMRS <= 14: interpTotalMRS = "Moderados leves"
-        elif 15 <= totalMRS <= 20: interpTotalMRS = "Moderados severos"
-        elif totalMRS > 20: interpTotalMRS = "Severos"
-
-        pctS = round((somatico / 16) * 100)
-        pctP = round((psicologico / 12) * 100)
-        pctU = round((urogenital / 12) * 100)
-        maxPct = max(pctS, pctP, pctU)
-
-        domPred = "Ninguno"
-        analisisDom = "Sin prevalencia marcada."
-        if maxPct > 0:
-            if maxPct == pctS:
-                domPred = "Somático"
-                analisisDom = "SINTOMATOLOGÍA VASOMOTORA Y OSTEOMUSCULAR PREDOMINANTE. Indicación preferente de THM sistémica."
-            elif maxPct == pctP:
-                domPred = "Psicológico"
-                analisisDom = "Afectación anímica prevalente. Descartar origen psicógeno independiente de la transición."
-            elif maxPct == pctU:
-                domPred = "Urogenital"
-                analisisDom = "SÍNDROME GENITOURINARIO (SGUM) DOMINANTE. Evaluar THM tópica o sistémica según severidad."
-
-        absCount = sum([cx1, cx2, cx3, cx4, cx5, cx6])
-        absText = "ALERTA: Contraindicación absoluta presente." if absCount > 0 else "Ninguna"
-        relText = "Enfermedad coronaria activa (Evaluación por Cardiología)" if cx_coronaria else "Ninguna"
-
-        rCardio = (2 if rc1 else 0) + (1 if rc2 else 0) + (1 if rc3 else 0) + (2 if rc4 else 0) + (2 if rc5 else 0) + (1 if rc6 else 0)
-        rTrombo = (3 if rt1 else 0) + (3 if rt2 else 0) + (2 if rt3 else 0) + (1 if rt4 else 0) + (1 if rt5 else 0)
-        rMama = (3 if rm1 else 0) + (3 if rm2 else 0) + (2 if rm3 else 0) + (3 if rm4 else 0)
-        rTotal = rCardio + rTrombo + rMama
-        interpRiesgo = "RIESGO BAJO" if rTotal <= 2 else ("RIESGO INTERMEDIO" if rTotal <= 5 else "RIESGO ALTO")
-
-        sitEspList = []
-        if se_endo: sitEspList.append("Endometriosis")
-        if se_adeno: sitEspList.append("Adenomiosis")
-        if se_mio: sitEspList.append("Miomas")
-        if se_migrana: sitEspList.append("Migraña con aura")
-        if se_lupus: sitEspList.append("Lupus")
-        if se_art: sitEspList.append("Artritis reumatoide")
-        if se_osteo: sitEspList.append("Osteoporosis")
-        if se_precoz: sitEspList.append("Menopausia precoz")
-        sitEspText = ", ".join(sitEspList) if sitEspList else "Ninguna"
-
-        indPuntos = 0
-        if edad < 60 or etapa == "Posmenopausia <10 años": indPuntos += 1
-        if totalMRS >= 9: indPuntos += 1
-        if b_dia >= 3: indPuntos += 1
-        if b_imp >= 4: indPuntos += 1
-        if absCount == 0: indPuntos += 1
-        if interpRiesgo in ["RIESGO BAJO", "RIESGO INTERMEDIO"]: indPuntos += 1
-        if se_osteo: indPuntos += 1
-        if se_precoz or edad < 40: indPuntos += 1
-
-        interpInd = "NO HORMONAL"
-        recFinal = "Priorizar manejo no hormonal y modificaciones de estilo de vida."
-
-        if indPuntos >= 7:
-            interpInd = "CANDIDATA IDEAL a THM"
-            recFinal = "Indicar THM sistémica. Los beneficios superan ampliamente a los riesgos."
-        elif indPuntos >= 5:
-            interpInd = "CANDIDATA CLARA a THM"
-            recFinal = "Indicar THM. Evaluar idoneidad de tipo y vía según comorbilidades."
-        elif indPuntos >= 3:
-            interpInd = "INDIVIDUALIZAR"
-            recFinal = "Ponderar minuciosamente relación riesgo/beneficio con la paciente."
-
-        if absCount > 0:
-            interpInd = "NO HORMONAL (CONTRAINDICACIÓN ABSOLUTA)"
-            recFinal = "CRÍTICO: THM Sistémica totalmente CONTRAINDICADA. Preferir alternativas no hormonales o estrógenos locales si se limita a síntomas genitourinarios."
-        else:
-            if se_migrana: recFinal += "\n* Paciente con Migraña con aura: Prescribir exclusivamente VÍA TRANSDÉRMICA."
-            if "Endometriosis" in sitEspList or "Adenomiosis" in sitEspList:
-                recFinal += "\n* Antecedente de Endometriosis/Adenomiosis: Utilizar ESQUEMA COMBINADO CONTINUO o DIU Mirena."
-
-        # Marcadores limpios para evitar errores de sintaxis
-        m_som = "[X]" if domPred == "Somático" else "[ ]"
-        m_psi = "[X]" if domPred == "Psicológico" else "[ ]"
-        m_uro = "[X]" if domPred == "Urogenital" else "[ ]"
-        
-        a_som = analisisDom if domPred == "Somático" else "No prevalente."
-        a_psi = analisisDom if domPred == "Psicológico" else "No prevalente."
-        a_uro = analisisDom if domPred == "Urogenital" else "No prevalente."
-
-        nombre_p = nombre if nombre else 'No indicada'
-        sud_p = 'Sí' if sudor else 'No'
-        noc_p = 'Sí' if noche else 'No'
-
-        informeTexto = f"""===========================================================
-INFORME DE EVALUACIÓN MENOPÁUSICA - Protocolo Ronald v2.0
-Desarrollo Clínico: Protocolo Ronald | Motor: Gemini AI
-===========================================================
-Paciente: {nombre_p} | Edad: {edad} años | FUR: {fur}
-Etapa: {etapa}
-
-1. ESCALA MRS COMPLETA
-   Dominio Somático: {somatico}/16 → {interpS}
-   Dominio Psicológico: {psicologico}/12 → {interpP}
-   Dominio Urogenital: {urogenital}/12 → {interpU}
-   Puntaje TOTAL: {totalMRS}/40 → {interpTotalMRS}
-
-2. ANÁLISIS POR DOMINIO
-   {m_som} Somático practical ({pctS}% del máx): {a_som}
-   {m_psi} Psicológico practical ({pctP}% del máx): {a_psi}
-   {m_uro} Urogenital practical ({pctU}% del máx): {a_uro}
-
-3. BOCHORNOS
-   Episodios/día: {b_dia} | Impacto: {b_imp}/10
-   Sudoración: {sud_p} | Despierta noche: {noc_p}
-
-4. CONTRAINDICACIONES
-   Absolutas: {absText}
-   Relativas: {relText}
-
-5. RIESGOS PONDERADOS
-   Cardiovascular: {rCardio} pts | Tromboembólico: {rTrombo} pts | Cáncer mama: {rMama} pts
-   RIESGO TOTAL: {rTotal} pts → {interpRiesgo}
-
-6. SITUACIONES ESPECIALES: {sitEspText}
-7. PREFERENCIA PACIENTE: {preferencia}
-8. PUNTAJE DE INDICACIÓN: {indPuntos}/8 → {interpInd}
-===========================================================
-RECOMENDACIÓN FINAL:
-{recFinal}
-===========================================================
-"""
-        st.subheader("📋 Informe Clínico Generado")
-        st.code(informeTexto, language="text")
-
-# ==========================================
-# MÓDULO 2: EVALUADOR FSFI (FUNCIÓN SEXUAL)
-# ==========================================
-else:
-    st.markdown("""
-        <div class="main-header" style="background: linear-gradient(90deg, #115e59 0%, #0f766e 100%);">
-            <span style="background-color: #2dd4bf; color: #0f766e; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;">Cuestionario Oficial</span>
-            <h1 style="margin: 5px 0 0 0; font-size: 24px;">Índice de Función Sexual Femenina (FSFI)</h1>
-            <p class="sub-text">Evaluación del TDSH y candidatura a terapia con Testosterona</p>
         </div>
-    """, unsafe_allow_html=True)
+    </div>
 
-    criterio_post = st.checkbox("La paciente es posmenopáusica (natural, quirúrgica o inducida).", value=True)
-    criterio_distress = st.checkbox("La baja del deseo le genera un malestar o angustia clínicamente significativa.", value=True)
+    <script>
+        const DOMAINS_SPEC = [
+            { id: "desire", name: "Deseo", questions: [1, 2], factor: 0.6, criteria: "≤ 3.3 es Deseo Bajo" },
+            { id: "arousal", name: "Excitación", questions: [3, 4, 5, 6], factor: 0.3, criteria: "" },
+            { id: "lubrication", name: "Lubricación", questions: [7, 8, 9, 10], factor: 0.3, criteria: "" },
+            { id: "orgasm", name: "Orgasmo", questions: [11, 12, 13], factor: 0.4, criteria: "" },
+            { id: "satisfaction", name: "Satisfacción", questions: [14, 15, 16], factor: 0.4, criteria: "" },
+            { id: "pain", name: "Dolor Coital", questions: [17, 18, 19], factor: 0.4, criteria: "≤ 4.0 es Dolor Alto" }
+        ];
 
-    st.markdown("---")
-    st.subheader("Cuestionario de 19 Ítems")
+        const QUESTIONS_DATABASE = [
+            { id: 1, domain: "desire", question: "1. ¿Con qué frecuencia sintió deseo o interés sexual?", options: [{ value: 5, label: "Casi siempre o siempre" }, { value: 4, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 2, label: "Pocas veces" }, { value: 1, label: "Casi nunca o nunca" }] },
+            { id: 2, domain: "desire", question: "2. ¿Cómo calificaría su nivel de deseo o interés sexual?", options: [{ value: 5, label: "Muy alto" }, { value: 4, label: "Alto" }, { value: 3, label: "Moderado" }, { value: 2, label: "Bajo" }, { value: 1, label: "Muy bajo o nulo" }] },
+            { id: 3, domain: "arousal", question: "3. ¿Con qué frecuencia se sintió sexualmente excitada durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Casi siempre o siempre" }, { value: 4, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 2, label: "Pocas veces" }, { value: 1, label: "Casi nunca o nunca" }] },
+            { id: 4, domain: "arousal", question: "4. ¿Cómo calificaría su nivel de excitación sexual durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Muy alto" }, { value: 4, label: "Alto" }, { value: 3, label: "Moderado" }, { value: 2, label: "Bajo" }, { value: 1, label: "Muy bajo o nulo" }] },
+            { id: 5, domain: "arousal", question: "5. ¿Con qué frecuencia se sintió satisfecha con su nivel de excitación durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Casi siempre o siempre" }, { value: 4, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 2, label: "Pocas veces" }, { value: 1, label: "Casi nunca o nunca" }] },
+            { id: 6, domain: "arousal", question: "6. ¿Con qué frecuencia se sintió confiada en lograr la excitación sexual durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Casi siempre o siempre" }, { value: 4, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 2, label: "Pocas veces" }, { value: 1, label: "Casi nunca o nunca" }] },
+            { id: 7, domain: "lubrication", question: "7. ¿Con qué frecuencia se lubricó ('se mojó') durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Casi siempre o siempre" }, { value: 4, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 2, label: "Pocas veces" }, { value: 1, label: "Casi nunca o nunca" }] },
+            { id: 8, domain: "lubrication", question: "8. ¿Cómo calificaría su dificultad para lograr la lubricación durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 1, label: "Mucho o extremadamente difícil" }, { value: 2, label: "Muy difícil" }, { value: 3, label: "Difícil" }, { value: 4, label: "Un poco difícil" }, { value: 5, label: "Nada difícil" }] },
+            { id: 9, domain: "lubrication", question: "9. ¿Con qué frecuencia mantuvo la lubricación hasta el final de la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Casi siempre o siempre" }, { value: 4, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 2, label: "Pocas veces" }, { value: 1, label: "Casi nunca o nunca" }] },
+            { id: 10, domain: "lubrication", question: "10. ¿Cómo calificaría su dificultad para mantener la lubricación hasta el final de la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 1, label: "Mucho o extremadamente difícil" }, { value: 2, label: "Muy difícil" }, { value: 3, label: "Difícil" }, { value: 4, label: "Un poco difícil" }, { value: 5, label: "Nada difícil" }] },
+            { id: 11, domain: "orgasm", question: "11. ¿Con qué frecuencia llegó al orgasmo (clímax) durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Casi siempre o siempre" }, { value: 4, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 2, label: "Pocas veces" }, { value: 1, label: "Casi nunca o nunca" }] },
+            { id: 12, domain: "orgasm", question: "12. ¿Cómo calificaría su dificultad para alcanzar el orgasmo durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 1, label: "Mucho o extremadamente difícil" }, { value: 2, label: "Muy difícil" }, { value: 3, label: "Difícil" }, { value: 4, label: "Un poco difícil" }, { value: 5, label: "Nada difícil" }] },
+            { id: 13, domain: "orgasm", question: "13. ¿Qué tan satisfecha estuvo con su capacidad para alcanzar el orgasmo durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Muy satisfecha" }, { value: 4, label: "Moderadamente satisfecha" }, { value: 3, label: "Ni satisfecha ni insatisfecha" }, { value: 2, label: "Moderadamente insatisfecha" }, { value: 1, label: "Muy insatisfecha" }] },
+            { id: 14, domain: "satisfaction", question: "14. ¿Qué tan satisfecha estuvo con la cercanía emocional entre usted y su pareja durante la actividad sexual?", options: [{ value: 0, label: "No hubo actividad sexual" }, { value: 5, label: "Muy satisfecha" }, { value: 4, label: "Moderadamente satisfecha" }, { value: 3, label: "Ni satisfecha ni insatisfecha" }, { value: 2, label: "Moderadamente insatisfecha" }, { value: 1, label: "Muy insatisfecha" }] },
+            { id: 15, domain: "satisfaction", question: "15. ¿Qué tan satisfecha estuvo con su relación sexual con su pareja?", options: [{ value: 5, label: "Muy satisfecha" }, { value: 4, label: "Moderadamente satisfecha" }, { value: 3, label: "Ni satisfecha ni insatisfecha" }, { value: 2, label: "Moderadamente insatisfecha" }, { value: 1, label: "Muy insatisfecha" }] },
+            { id: 16, domain: "satisfaction", question: "16. ¿Qué tan satisfecha estuvo con su vida sexual en general?", options: [{ value: 5, label: "Muy satisfecha" }, { value: 4, label: "Moderadamente satisfecha" }, { value: 3, label: "Ni satisfecha ni insatisfecha" }, { value: 2, label: "Moderadamente insatisfecha" }, { value: 1, label: "Muy insatisfecha" }] },
+            { id: 17, domain: "pain", question: "17. ¿Con qué frecuencia experimentó dolor o malestar durante la penetración vaginal?", options: [{ value: 0, label: "No hubo penetración" }, { value: 1, label: "Casi siempre o siempre" }, { value: 2, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 4, label: "Pocas veces" }, { value: 5, label: "Casi nunca o nunca" }] },
+            { id: 18, domain: "pain", question: "18. ¿Con qué frecuencia experimentó dolor o malestar después de la penetración vaginal?", options: [{ value: 0, label: "No hubo penetración" }, { value: 1, label: "Casi siempre o siempre" }, { value: 2, label: "La mayoría de las veces" }, { value: 3, label: "A veces" }, { value: 4, label: "Pocas veces" }, { value: 5, label: "Casi nunca o nunca" }] },
+            { id: 19, domain: "pain", question: "19. ¿Cómo calificaría el nivel de dolor o malestar durante o después de la penetración vaginal?", options: [{ value: 0, label: "No hubo penetración" }, { value: 1, label: "Muy alto o insoportable" }, { value: 2, label: "Alto" }, { value: 3, label: "Moderado" }, { value: 4, label: "Bajo" }, { value: 5, label: "Muy bajo o nulo" }] }
+        ];
 
-    # 1. Deseo
-    st.markdown("### 1. Deseo (Factor x0.6)")
-    q1 = st.radio("1. ¿Con qué frecuencia sintió deseo o interés sexual?", [5, 4, 3, 2, 1], format_func=lambda x: {5:"5 - Casi siempre/siempre", 4:"4 - Mayoría de veces", 3:"3 - A veces", 2:"2 - Pocas veces", 1:"1 - Casi nunca/nunca"}[x], index=3)
-    q2 = st.radio("2. ¿Cómo calificaría su nivel de deseo o interés sexual?", [5, 4, 3, 2, 1], format_func=lambda x: {5:"5 - Muy alto", 4:"4 - Alto", 3:"3 - Moderado", 2:"2 - Bajo", 1:"1 - Muy bajo o nulo"}[x], index=3)
+        let state = {
+            responses: {},
+            postmenopause: true,
+            distress: true,
+            mammo: true,
+            labs: true
+        };
 
-    # 2. Excitación
-    st.markdown("### 2. Excitación (Factor x0.3)")
-    q3 = st.selectbox("3. Frecuencia de excitación durante la actividad sexual", [0, 5, 4, 3, 2, 1], index=3)
-    q4 = st.selectbox("4. Nivel de excitación durante la actividad sexual", [0, 5, 4, 3, 2, 1], index=3)
-    q5 = st.selectbox("5. Satisfacción con el nivel de excitación", [0, 5, 4, 3, 2, 1], index=4)
-    q6 = st.selectbox("6. Confianza en lograr la excitación sexual", [0, 5, 4, 3, 2, 1], index=3)
+        function renderQuestions() {
+            const formContainer = document.getElementById('questions-form');
+            formContainer.innerHTML = '';
 
-    # 3. Lubricación
-    st.markdown("### 3. Lubricación (Factor x0.3)")
-    q7 = st.selectbox("7. Frecuencia de lubricación", [0, 5, 4, 3, 2, 1], index=2)
-    q8 = st.selectbox("8. Dificultad para lograr lubricación", [0, 1, 2, 3, 4, 5], index=4)
-    q9 = st.selectbox("9. Mantener la lubricación hasta el final", [0, 5, 4, 3, 2, 1], index=2)
-    q10 = st.selectbox("10. Dificultad para mantener la lubricación", [0, 1, 2, 3, 4, 5], index=4)
+            DOMAINS_SPEC.forEach(domain => {
+                const domainQuestions = QUESTIONS_DATABASE.filter(q => q.domain === domain.id);
+                const domainCard = document.createElement('div');
+                domainCard.className = "bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6";
+                
+                const cardHeader = document.createElement('div');
+                cardHeader.className = "bg-slate-50 border-b border-slate-200 p-4 flex justify-between items-center";
+                cardHeader.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                        <h3 class="font-bold text-slate-800 text-sm md:text-base">Dominio: ${domain.name}</h3>
+                    </div>
+                    <span class="text-[10px] bg-teal-50 text-teal-700 font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">Peso: x${domain.factor}</span>
+                `;
+                domainCard.appendChild(cardHeader);
 
-    # 4. Orgasmo
-    st.markdown("### 4. Orgasmo (Factor x0.4)")
-    q11 = st.selectbox("11. Frecuencia al llegar al orgasmo", [0, 5, 4, 3, 2, 1], index=3)
-    q12 = st.selectbox("12. Dificultad para alcanzar el orgasmo", [0, 1, 2, 3, 4, 5], index=3)
-    q13 = st.selectbox("13. Satisfacción con capacidad orgásmica", [0, 5, 4, 3, 2, 1], index=3)
+                const cardBody = document.createElement('div');
+                cardBody.className = "p-4 md:p-6 space-y-6";
 
-    # 5. Satisfacción
-    st.markdown("### 5. Satisfacción (Factor x0.4)")
-    q14 = st.selectbox("14. Cercanía emocional con pareja", [0, 5, 4, 3, 2, 1], index=3)
-    q15 = st.selectbox("15. Satisfacción con relación sexual", [5, 4, 3, 2, 1], index=2)
-    q16 = st.selectbox("16. Satisfacción con vida sexual en general", [5, 4, 3, 2, 1], index=3)
+                domainQuestions.forEach(q => {
+                    const qElement = document.createElement('div');
+                    qElement.className = "space-y-3";
+                    qElement.innerHTML = `
+                        <p class="text-xs md:text-sm font-semibold text-slate-700 leading-relaxed">${q.question}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2" id="options-group-${q.id}"></div>
+                    `;
+                    
+                    const optionsGroup = qElement.querySelector(`#options-group-${q.id}`);
+                    
+                    q.options.forEach(opt => {
+                        const optButton = document.createElement('button');
+                        optButton.type = "button";
+                        optButton.id = `q-${q.id}-opt-${opt.value}`;
+                        optButton.className = "flex items-center justify-between p-3 rounded-xl border border-slate-200 text-left text-xs hover:border-teal-500 hover:bg-slate-50 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                        optButton.innerHTML = `
+                            <span class="text-slate-600 font-medium">${opt.label}</span>
+                            <span class="bg-slate-100 text-slate-500 font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2">Puntos: ${opt.value}</span>
+                        `;
+                        
+                        optButton.addEventListener('click', () => {
+                            selectOption(q.id, opt.value, domain.id);
+                        });
 
-    # 6. Dolor
-    st.markdown("### 6. Dolor Coital (Factor x0.4)")
-    q17 = st.selectbox("17. Frecuencia de dolor durante penetración", [0, 1, 2, 3, 4, 5], index=5)
-    q18 = st.selectbox("18. Frecuencia de dolor después de penetración", [0, 1, 2, 3, 4, 5], index=5)
-    q19 = st.selectbox("19. Nivel de dolor durante/después", [0, 1, 2, 3, 4, 5], index=5)
+                        optionsGroup.appendChild(optButton);
+                    });
 
-    if st.button("📊 CALCULAR PUNTAJE FSFI", type="primary", use_container_width=True):
-        score_desire = (q1 + q2) * 0.6
-        score_arousal = (q3 + q4 + q5 + q6) * 0.3
-        score_lubrication = (q7 + q8 + q9 + q10) * 0.3
-        score_orgasm = (q11 + q12 + q13) * 0.4
-        score_satisfaction = (q14 + q15 + q16) * 0.4
-        score_pain = (q17 + q18 + q19) * 0.4
+                    cardBody.appendChild(qElement);
+                });
 
-        score_total = score_desire + score_arousal + score_lubrication + score_orgasm + score_satisfaction + score_pain
+                domainCard.appendChild(cardBody);
+                formContainer.appendChild(domainCard);
+            });
+        }
 
-        st.markdown("---")
-        st.subheader("Resultados de la Evaluación")
+        function selectOption(questionId, value, domainId) {
+            state.responses[questionId] = value;
+            
+            const questionData = QUESTIONS_DATABASE.find(q => q.id === questionId);
+            questionData.options.forEach(opt => {
+                const btn = document.getElementById(`q-${questionId}-opt-${opt.value}`);
+                if (btn) {
+                    btn.className = "flex items-center justify-between p-3 rounded-xl border border-slate-200 text-left text-xs hover:border-teal-500 hover:bg-slate-50 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                    const badge = btn.querySelector('span:last-child');
+                    if (badge) badge.className = "bg-slate-100 text-slate-500 font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2";
+                }
+            });
 
-        c1, c2, c3 = st.columns(3)
-        c1.metric("1. Deseo", f"{score_desire:.2f} pts", "≤ 3.3 = TDSH" if score_desire <= 3.3 else "Normal")
-        c2.metric("2. Excitación", f"{score_arousal:.2f} pts")
-        c3.metric("3. Lubricación", f"{score_lubrication:.2f} pts")
+            const activeBtn = document.getElementById(`q-${questionId}-opt-${value}`);
+            if (activeBtn) {
+                activeBtn.className = "flex items-center justify-between p-3 rounded-xl border-2 border-teal-600 bg-teal-50/40 text-left text-xs transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                const badge = activeBtn.querySelector('span:last-child');
+                if (badge) badge.className = "bg-teal-600 text-white font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2";
+            }
 
-        c4, c5, c6 = st.columns(3)
-        c4.metric("4. Orgasmo", f"{score_orgasm:.2f} pts")
-        c5.metric("5. Satisfacción", f"{score_satisfaction:.2f} pts")
-        c6.metric("6. Dolor Coital", f"{score_pain:.2f} pts", "≤ 4.0 = Dispareunia" if score_pain <= 4.0 else "Sin dolor")
+            calculateResults();
+        }
 
-        st.subheader(f"PUNTAJE GLOBAL FSFI: {score_total:.2f} pts")
+        function calculateResults() {
+            let totalWeightedScore = 0;
+            let answeredCount = 0;
+            const domainScores = {};
 
-        if not criterio_post or not criterio_distress:
-            st.error("❌ **No Candidata a Testosterona:** No cumple los criterios basales de posmenopausia y malestar manifiesto.")
-        elif score_pain <= 4.0:
-            st.warning("⚠️ **Tratar Dispareunia Primero:** Paciente presenta dolor coital significativo. Tratar atrofia local con estrógenos antes de evaluar testosterona.")
-        elif score_desire > 3.3:
-            st.info("ℹ️ **No Candidata a TDSH:** Subtotal de deseo > 3.3 (Deseo conservado).")
-        else:
-            st.success("✅ **Candidata Apta para Testosterona:** Cumple criterios de TDSH (Deseo ≤ 3.3) sin dolor limitante. Solicitar laboratorios previos.")
+            DOMAINS_SPEC.forEach(domain => {
+                let domainSum = 0;
+                let domainAnswered = 0;
+
+                domain.questions.forEach(qId => {
+                    if (state.responses[qId] !== undefined) {
+                        domainSum += state.responses[qId];
+                        domainAnswered++;
+                    }
+                });
+
+                const isDomainComplete = domainAnswered === domain.questions.length;
+                const weighted = domainSum * domain.factor;
+                
+                domainScores[domain.id] = { sum: domainSum, weighted: weighted, isComplete: isDomainComplete };
+
+                if (isDomainComplete) {
+                    answeredCount += domainAnswered;
+                    totalWeightedScore += weighted;
+                }
+
+                const scoreEl = document.getElementById(`score-${domain.id}`);
+                const badgeEl = document.getElementById(`badge-${domain.id}`);
+                
+                if (scoreEl && badgeEl) {
+                    scoreEl.textContent = weighted.toFixed(2);
+                    
+                    if (isDomainComplete) {
+                        if (domain.id === 'desire') {
+                            if (weighted <= 3.3) {
+                                badgeEl.textContent = "Deseo Bajo (TDSH)";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 w-fit";
+                            } else {
+                                badgeEl.textContent = "Deseo Normal";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 w-fit";
+                            }
+                        } else if (domain.id === 'pain') {
+                            if (weighted <= 4.0) {
+                                badgeEl.textContent = "Dispareunia Activa";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300 w-fit";
+                            } else {
+                                badgeEl.textContent = "Sin dolor limitante";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 w-fit";
+                            }
+                        } else {
+                            badgeEl.textContent = "Completo";
+                            badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-teal-500/20 text-teal-300 w-fit";
+                        }
+                    } else {
+                        scoreEl.textContent = "0.00";
+                        badgeEl.textContent = "Incompleto";
+                        badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit";
+                    }
+                }
+            });
+
+            const totalQuestionsCount = QUESTIONS_DATABASE.length;
+            const progressPct = (answeredCount / totalQuestionsCount) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPct}%`;
+            document.getElementById('progress-text').textContent = `${answeredCount} / ${totalQuestionsCount} Respondidas`;
+
+            const scoreTotalEl = document.getElementById('score-total');
+            if (scoreTotalEl) scoreTotalEl.textContent = totalWeightedScore.toFixed(2);
+
+            const isPostmenopause = document.getElementById('chk-postmenopause').checked;
+            const hasDistress = document.getElementById('chk-distress').checked;
+            const hasMammo = document.getElementById('chk-mammo').checked;
+            const hasLabs = document.getElementById('chk-labs').checked;
+            
+            const verdictCard = document.getElementById('verdict-card');
+            const verdictTitle = document.getElementById('verdict-title');
+            const verdictBody = document.getElementById('verdict-body');
+
+            const isAllAnswered = answeredCount === totalQuestionsCount;
+
+            if (!isAllAnswered) {
+                verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-slate-800 text-slate-300 border-slate-700";
+                verdictTitle.textContent = "Evaluando Datos...";
+                verdictBody.textContent = `Por favor, complete las ${totalQuestionsCount - answeredCount} preguntas pendientes.`;
+            } else {
+                const desireScore = domainScores['desire'].weighted;
+                const painScore = domainScores['pain'].weighted;
+
+                if (!isPostmenopause || !hasDistress) {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-rose-950/40 text-rose-300 border-rose-900";
+                    verdictTitle.textContent = "No Candidata (Requisitos Criterio Consenso)";
+                    verdictBody.textContent = "La terapia con testosterona solo se indica bajo el Consenso Global en pacientes posmenopáusicas con malestar clínico manifiesto.";
+                } else if (!hasMammo || !hasLabs) {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-amber-950/40 text-amber-300 border-amber-900";
+                    verdictTitle.textContent = "Pendiente: Exámenes de Seguridad";
+                    verdictBody.textContent = "Cumple criterios sintomáticos, pero requiere mamografía vigente normal y perfil hormonal/hepático antes de prescribir.";
+                } else if (painScore <= 4.0) {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-amber-950/40 text-amber-300 border-amber-900";
+                    verdictTitle.textContent = "Tratar Dispareunia Primero";
+                    verdictBody.textContent = `La paciente tiene dolor coital significativo (${painScore.toFixed(2)} pts). Priorice resolver la atrofia con estrógenos tópicos locales antes de evaluar testosterona.`;
+                } else if (desireScore > 3.3) {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-rose-950/40 text-rose-300 border-rose-900";
+                    verdictTitle.textContent = "No Candidata (Deseo Conservado)";
+                    verdictBody.textContent = `El subtotal de deseo (${desireScore.toFixed(2)} pts) es mayor al límite diagnóstico de ≤ 3.3. No califica para TDSH.`;
+                } else {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-emerald-950/40 text-emerald-300 border-emerald-900";
+                    verdictTitle.textContent = "✓ Candidata Apta para Testosterona";
+                    verdictBody.textContent = `Cumple criterios: Deseo bajo (${desireScore.toFixed(2)} pts), sin dispareunia limitante, estudios pre-tratamiento en regla y estatus posmenopáusico con malestar.`;
+                }
+            }
+
+            generateClinicalNote(domainScores, totalWeightedScore, isAllAnswered, isPostmenopause, hasDistress, hasMammo, hasLabs);
+        }
+
+        function generateClinicalNote(domainScores, totalScore, isComplete, isPostmenopause, hasDistress, hasMammo, hasLabs) {
+            const noteEl = document.getElementById('clinical-note');
+            if (!noteEl) return;
+
+            if (!isComplete) {
+                noteEl.value = "Complete el test completo con la paciente para estructurar la nota médica automática.";
+                return;
+            }
+
+            const dateStr = new Date().toLocaleDateString('es-ES');
+            const desireVal = domainScores['desire'].weighted;
+            const arousalVal = domainScores['arousal'].weighted;
+            const lubVal = domainScores['lubrication'].weighted;
+            const orgVal = domainScores['orgasm'].weighted;
+            const satVal = domainScores['satisfaction'].weighted;
+            const painVal = domainScores['pain'].weighted;
+
+            let conclusionStr = "";
+            if (!isPostmenopause || !hasDistress) {
+                conclusionStr = "No candidata a terapia androgénica (No cumple criterios basales de posmenopausia y distress).";
+            } else if (!hasMammo || !hasLabs) {
+                conclusionStr = "Candidata clínica preliminar. Se difiere inicio de testosterona hasta completar Mamografía y Perfil Hormonal/Hepático basales.";
+            } else if (painVal <= 4.0) {
+                conclusionStr = "No apta para testosterona en este momento. Se sospecha dispareunia / atrofia urogenital severa como causa primaria. Tratar primero la mucosa local.";
+            } else if (desireVal > 3.3) {
+                conclusionStr = "No cumple criterios de TDSH (Deseo sexual conservado según FSFI).";
+            } else {
+                conclusionStr = "Apta para terapia con Testosterona Transdérmica Femenina (1/10 dosis de varón). Se cuenta con mamografía y laboratorio basales sin contraindicaciones.";
+            }
+
+            const noteText = `REPORTE CLÍNICO - ÍNDICE DE FUNCIÓN SEXUAL FEMENINA (FSFI)
+======================================================
+Fecha de Evaluación: ${dateStr}
+Criterio Clínico Basal: ${isPostmenopause ? 'Posmenopáusica' : 'Premenopáusica'} | Distress Sexual: ${hasDistress ? 'SÍ' : 'NO'}
+Mamografía Vigente: ${hasMammo ? 'SÍ (Normal)' : 'NO'} | Perfil Hormonal/Hepático: ${hasLabs ? 'EVALUADO' : 'PENDIENTE'}
+
+SUBTOTALES DE DOMINIOS FSFI:
+------------------------------------------------------
+- DESEO: ${desireVal.toFixed(2)} pts  (Umbral de sospecha TDSH: <= 3.3)
+- EXCITACIÓN: ${arousalVal.toFixed(2)} pts
+- LUBRICACIÓN: ${lubVal.toFixed(2)} pts
+- ORGASMO: ${orgVal.toFixed(2)} pts
+- SATISFACCIÓN: ${satVal.toFixed(2)} pts
+- DOLOR COITAL: ${painVal.toFixed(2)} pts  (Disfunción por dispareunia: <= 4.0)
+
+PUNTAJE GLOBAL FSFI: ${totalScore.toFixed(2)} pts  (Disfunción si <= 26.55)
+
+DIAGNÓSTICO Y PLAN DE MANEJO RECOMENDADO:
+------------------------------------------------------
+${conclusionStr}
+
+------------------------------------------------------
+Co-diseñado para la práctica clínica por:
+Dr. Ronald (Ginecología y Obstetricia) & Gemini AI`;
+
+            noteEl.value = noteText;
+        }
+
+        function copyClinicalNote() {
+            const textarea = document.getElementById('clinical-note');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                const msg = document.getElementById('copy-success-msg');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 3000);
+            } catch (err) {
+                console.error("Error al copiar nota: ", err);
+            }
+        }
+
+        function exportToPDF() {
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Arial, sans-serif';
+            element.innerHTML = `
+                <h1 style="color: #0f766e; border-bottom: 2px solid #0f766e; padding-bottom: 5px;">Informe Clínico FSFI</h1>
+                <p style="font-size: 12px; color: #475569;"><strong>Evaluador:</strong> Dr. Ronald | Ginecología y Obstetricia</p>
+                <hr style="margin: 15px 0;">
+                <pre style="font-family: monospace; font-size: 11px; white-space: pre-wrap; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">${document.getElementById('clinical-note').value}</pre>
+            `;
+
+            const opt = {
+                margin:       10,
+                filename:     `Reporte_FSFI_Dr_Ronald_${new Date().toISOString().slice(0,10)}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function resetAll() {
+            state.responses = {};
+            document.getElementById('chk-postmenopause').checked = true;
+            document.getElementById('chk-distress').checked = true;
+            document.getElementById('chk-mammo').checked = true;
+            document.getElementById('chk-labs').checked = true;
+            
+            renderQuestions();
+            calculateResults();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function loadDemoPatient() {
+            state.responses[1] = 2; state.responses[2] = 2;
+            state.responses[3] = 3; state.responses[4] = 3; state.responses[5] = 2; state.responses[6] = 3;
+            state.responses[7] = 4; state.responses[8] = 4; state.responses[9] = 4; state.responses[10] = 4;
+            state.responses[11] = 3; state.responses[12] = 3; state.responses[13] = 3;
+            state.responses[14] = 3; state.responses[15] = 3; state.responses[16] = 2;
+            state.responses[17] = 5; state.responses[18] = 5; state.responses[19] = 5;
+
+            renderQuestions();
+
+            Object.keys(state.responses).forEach(qId => {
+                const val = state.responses[qId];
+                const activeBtn = document.getElementById(`q-${qId}-opt-${val}`);
+                if (activeBtn) {
+                    activeBtn.className = "flex items-center justify-between p-3 rounded-xl border-2 border-teal-600 bg-teal-50/40 text-left text-xs transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                    const badge = activeBtn.querySelector('span:last-child');
+                    if (badge) badge.className = "bg-teal-600 text-white font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2";
+                }
+            });
+
+            calculateResults();
+        }
+
+        window.onload = function() {
+            renderQuestions();
+            
+            document.getElementById('chk-postmenopause').addEventListener('change', calculateResults);
+            document.getElementById('chk-distress').addEventListener('change', calculateResults);
+            document.getElementById('chk-mammo').addEventListener('change', calculateResults);
+            document.getElementById('chk-labs').addEventListener('change', calculateResults);
+            
+            loadDemoPatient();
+        };
+    </script>
+</body>
+</html>
