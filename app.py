@@ -60,7 +60,7 @@ html_code = """
 
     <div class="max-w-7xl mx-auto px-4 py-6">
 
-        <!-- MÓDULO 1: PROTOCOLO RONALD V2.0 - EVALUACIÓN THM -->
+        <!-- MÓDULO 1: PROTOCOLO RONALD v2.0 -- EVALUACIÓN THM --> por <!-- MÓDULO 1: PROTOCOLO THM (MRS / RIESGOS) v2.0 -- EVALUACIÓN THM -->
         <main id="tab-thm" class="block space-y-6">
             <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 shadow-xl border border-indigo-500/20">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -69,7 +69,7 @@ html_code = """
                             <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">v2.0 Actualizada</span>
                             <span class="text-xs text-indigo-300"><i class="fa-solid fa-microchip mr-1"></i> Powered by Gemini AI</span>
                         </div>
-                        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-2 text-white">PROTOCOLO RONALD v2.0</h2>
+                       <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-2 text-white">PROTOCOLO THM (MRS / RIESGOS) v2.0</h2>
                         <p class="text-xs md:text-sm text-slate-300 mt-1">Evaluación Clínica Digitalizada de Terapia Hormonal Menopáusica (THM)</p>
                     </div>
                     <div class="text-right border-l-0 md:border-l border-indigo-800 pl-0 md:pl-6 text-xs text-slate-400 hidden sm:block">
