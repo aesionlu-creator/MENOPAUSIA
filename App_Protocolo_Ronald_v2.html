@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Ronald v2.0 - Evaluación THM</title>
+    <!-- Tailwind CSS (Diseño Moderno) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome (Iconos) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js (Generación de PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen pb-12">
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="max-w-5xl mx-auto px-4 py-6">
+
+        <!-- HEADER CON CRÉDITOS -->
+        <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 shadow-xl mb-8 border border-indigo-500/20">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">v2.0 Actualizada</span>
+                        <span class="text-xs text-indigo-300"><i class="fa-solid fa-microchip mr-1"></i> Powered by Gemini AI</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-2 text-white">PROTOCOLO RONALD v2.0</h1>
+                    <p class="text-xs md:text-sm text-slate-300 mt-1">Evaluación Clínica Digitalizada de Terapia Hormonal Menopáusica (THM)</p>
+                </div>
+                <div class="text-right border-l-0 md:border-l border-indigo-800 pl-0 md:pl-6 text-xs text-slate-400 hidden sm:block">
+                    <p class="font-semibold text-indigo-200">Co-Desarrollo Clínico - Tecnológico</p>
+                    <p class="mt-0.5"><i class="fa-solid fa-user-doctor text-indigo-400 mr-1"></i> Autor: Protocolo Ronald</p>
+                    <p><i class="fa-solid fa-brain text-purple-400 mr-1"></i> Motor Clínico: Gemini AI Collaborator</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- FORMULARIO CLINICO INTERACTIVO -->
+        <form id="appForm" class="space-y-6">
+
+            <!-- PASO 1: DATOS GENERALES -->
+            <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-4 pb-2 border-b">
+                    <i class="fa-solid fa-address-card text-indigo-600"></i> PASO 1: Confirmar Etapa Reproductiva
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Nombre Completo</label>
+                        <input type="text" id="nombre" placeholder="Nombre de la paciente" required class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Edad (Años)</label>
+                        <input type="number" id="edad" placeholder="Ej. 52" required class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">FUR (Fecha Última Regla)</label>
+                        <input type="text" id="fur" placeholder="DD/MM/AAAA" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Etapa Reproductiva</label>
+                        <select id="etapa" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="Premenopausia">Premenopausia</option>
+                            <option value="Perimenopausia">Perimenopausia</option>
+                            <option value="Posmenopausia <10 años">Posmenopausia &lt; 10 años</option>
+                            <option value="Posmenopausia ≥10 años">Posmenopausia &ge; 10 años</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASO 2: ESCALA MRS COMPLETA -->
+            <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                <div class="flex justify-between items-center mb-4 pb-2 border-b">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-simple text-indigo-600"></i> PASO 2: Escala MRS Completa (Validada)
+                    </h2>
+                    <span class="text-xs text-slate-500 font-medium">0 = Sin molestia | 4 = Muy severo</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Dominio Somático -->
+                    <div class="bg-amber-50/50 rounded-xl p-4 border border-amber-200/60">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-900 mb-3 flex items-center justify-between">
+                            <span>Dominio Somático</span>
+                            <span class="text-amber-700 bg-amber-100 px-2 py-0.5 rounded text-[10px]">Máx 16 pts</span>
+                        </h3>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">1. Bochornos / Sofocos</label>
+                                <select class="mrs-s w-full border border-amber-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">2. Trastornos del sueño</label>
+                                <select class="mrs-s w-full border border-amber-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">3. Dolores osteomusculares</label>
+                                <select class="mrs-s w-full border border-amber-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">4. Cansancio / Fatiga</label>
+                                <select class="mrs-s w-full border border-amber-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dominio Psicológico -->
+                    <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-200/60">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-blue-900 mb-3 flex items-center justify-between">
+                            <span>Dominio Psicológico</span>
+                            <span class="text-blue-700 bg-blue-100 px-2 py-0.5 rounded text-[10px]">Máx 12 pts</span>
+                        </h3>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">5. Depresión / Tristeza</label>
+                                <select class="mrs-p w-full border border-blue-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">6. Irritabilidad / Mal humor</label>
+                                <select class="mrs-p w-full border border-blue-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">7. Ansiedad / Tensión</label>
+                                <select class="mrs-p w-full border border-blue-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dominio Urogenital -->
+                    <div class="bg-purple-50/50 rounded-xl p-4 border border-purple-200/60">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-purple-900 mb-3 flex items-center justify-between">
+                            <span>Dominio Urogenital</span>
+                            <span class="text-purple-700 bg-purple-100 px-2 py-0.5 rounded text-[10px]">Máx 12 pts</span>
+                        </h3>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">8. Sequedad vaginal</label>
+                                <select class="mrs-u w-full border border-purple-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">9. Disfunción sexual</label>
+                                <select class="mrs-u w-full border border-purple-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">10. Síntomas urinarios</label>
+                                <select class="mrs-u w-full border border-purple-200 rounded-lg p-2 bg-white">
+                                    <option value="0">0 - Ausente</option><option value="1">1 - Leve</option><option value="2">2 - Moderado</option><option value="3">3 - Severo</option><option value="4">4 - Muy severo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASO 3 Y PASO 4 (BLOQUE MIXTO) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- PASO 3: BOCHORNOS -->
+                <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-4 pb-2 border-b">
+                        <i class="fa-solid fa-fire text-orange-500"></i> PASO 3: Evaluación de Bochornos
+                    </h2>
+                    <div class="space-y-4 text-xs">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Episodios / día</label>
+                                <input type="number" id="bochornos-dia" value="0" class="w-full border border-slate-300 rounded-lg p-2">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Impacto (0 al 10)</label>
+                                <input type="number" id="bochornos-impacto" min="0" max="10" value="0" class="w-full border border-slate-300 rounded-lg p-2">
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
+                            <p class="font-bold text-slate-600 uppercase text-[10px]">Síntomas Asociados</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center gap-2"><input type="checkbox" id="sint-sudor" class="rounded text-indigo-600"> <span>Sudoración</span></label>
+                                <label class="flex items-center gap-2"><input type="checkbox" id="sint-noche" class="rounded text-indigo-600"> <span>Despierta de noche</span></label>
+                                <label class="flex items-center gap-2"><input type="checkbox" id="sint-act" class="rounded text-indigo-600"> <span>Interrumpe rutina</span></label>
+                                <label class="flex items-center gap-2"><input type="checkbox" id="sint-ropa" class="rounded text-indigo-600"> <span>Cambia de ropa</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 4: CONTRAINDICACIONES -->
+                <div class="bg-red-50/40 rounded-xl shadow-md p-6 border border-red-200">
+                    <h2 class="text-base font-bold text-red-900 flex items-center gap-2 mb-3 pb-2 border-b border-red-200">
+                        <i class="fa-solid fa-ban text-red-600"></i> PASO 4: Contraindicaciones
+                    </h2>
+                    <p class="text-[11px] text-red-700 mb-3 font-medium">Marcar cualquiera detendrá automáticamente la indicación de THM sistémica:</p>
+                    <div class="space-y-2 text-xs">
+                        <label class="flex items-start gap-2 text-slate-800"><input type="checkbox" class="cx-absoluta mt-0.5 rounded text-red-600"> <span>Cáncer de mama (activo o previo)</span></label>
+                        <label class="flex items-start gap-2 text-slate-800"><input type="checkbox" class="cx-absoluta mt-0.5 rounded text-red-600"> <span>Sangrado uterino no estudiado</span></label>
+                        <label class="flex items-start gap-2 text-slate-800"><input type="checkbox" class="cx-absoluta mt-0.5 rounded text-red-600"> <span>TVP / TEP activa o reciente</span></label>
+                        <label class="flex items-start gap-2 text-slate-800"><input type="checkbox" class="cx-absoluta mt-0.5 rounded text-red-600"> <span>IAM / ACV / AIT reciente (&lt; 6 meses)</span></label>
+                        <label class="flex items-start gap-2 text-slate-800"><input type="checkbox" class="cx-absoluta mt-0.5 rounded text-red-600"> <span>Enfermedad hepática grave descompensada</span></label>
+                        <label class="flex items-start gap-2 text-slate-800"><input type="checkbox" class="cx-absoluta mt-0.5 rounded text-red-600"> <span>Hiperplasia endometrial atípica no tratada</span></label>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-red-200/80 text-xs">
+                        <label class="flex items-center gap-2 font-semibold text-slate-800"><input type="checkbox" id="cx-coronaria" class="rounded text-amber-600"> <span>⚠️ Relativa: Enfermedad coronaria activa</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASO 5: FACTORES DE RIESGO PONDERADOS -->
+            <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-4 pb-2 border-b">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> PASO 5: Factores de Riesgo (Ponderados)
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <!-- Cardio -->
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <h3 class="font-bold text-slate-800 border-b pb-1 mb-2">A. Cardiovascular</h3>
+                        <div class="space-y-1.5">
+                            <label class="flex items-center justify-between"><span>HTA no controlada (+2)</span><input type="checkbox" value="2" class="rf-cardio rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Diabetes (+1)</span><input type="checkbox" value="1" class="rf-cardio rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Dislipidemia (+1)</span><input type="checkbox" value="1" class="rf-cardio rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>IMC &ge; 30 (+2)</span><input type="checkbox" value="2" class="rf-cardio rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Tabaquismo activo (+2)</span><input type="checkbox" value="2" class="rf-cardio rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Enfermedad CV (+1)</span><input type="checkbox" value="1" class="rf-cardio rounded text-indigo-600"></label>
+                        </div>
+                    </div>
+                    <!-- Trombo -->
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <h3 class="font-bold text-slate-800 border-b pb-1 mb-2">B. Tromboembólico</h3>
+                        <div class="space-y-1.5">
+                            <label class="flex items-center justify-between"><span>TVP / TEP previa (+3)</span><input type="checkbox" value="3" class="rf-trombo rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Trombofilia conocida (+3)</span><input type="checkbox" value="3" class="rf-trombo rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>IMC &ge; 30 (+2)</span><input type="checkbox" value="2" class="rf-trombo rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Várices importantes (+1)</span><input type="checkbox" value="1" class="rf-trombo rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Fam. 1er grado Trombosis (+1)</span><input type="checkbox" value="1" class="rf-trombo rounded text-indigo-600"></label>
+                        </div>
+                    </div>
+                    <!-- Mama -->
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <h3 class="font-bold text-slate-800 border-b pb-1 mb-2">C. Cáncer de Mama</h3>
+                        <div class="space-y-1.5">
+                            <label class="flex items-center justify-between"><span>Antecedente personal (+3)</span><input type="checkbox" value="3" class="rf-mama rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>BRCA 1/2 (+3)</span><input type="checkbox" value="3" class="rf-mama rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Familiar 1er grado (+2)</span><input type="checkbox" value="2" class="rf-mama rounded text-indigo-600"></label>
+                            <label class="flex items-center justify-between"><span>Hiperplasia atípica (+3)</span><input type="checkbox" value="3" class="rf-mama rounded text-indigo-600"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASO 6 Y PASO 7 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-3 pb-2 border-b">
+                        <i class="fa-solid fa-sliders text-indigo-600"></i> PASO 6: Individualización
+                    </h2>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Endometriosis" class="sit-esp rounded"> <span>Endometriosis</span></label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Adenomiosis" class="sit-esp rounded"> <span>Adenomiosis</span></label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Miomas" class="sit-esp rounded"> <span>Miomas</span></label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Migraña con aura" class="sit-esp rounded" id="se-migrana"> <span>Migraña con aura</span></label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Lupus" class="sit-esp rounded"> <span>Lupus</span></label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Artritis reumatoide" class="sit-esp rounded"> <span>Artritis reumatoide</span></label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Osteoporosis" class="sit-esp rounded" id="se-osteo"> <span>Osteoporosis</span></label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" value="Menopausia precoz" class="sit-esp rounded" id="se-precoz"> <span>Menopausia precoz</span></label>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-3 pb-2 border-b">
+                        <i class="fa-solid fa-comments text-indigo-600"></i> PASO 7: Preferencia Paciente
+                    </h2>
+                    <div class="text-xs space-y-3">
+                        <label class="block font-medium text-slate-700">Deseo expreso de la paciente:</label>
+                        <select id="preferencia" class="w-full border border-slate-300 rounded-lg p-2.5 bg-white font-medium">
+                            <option value="Desea THM">Desea THM</option>
+                            <option value="No desea THM">No desea THM</option>
+                            <option value="Indecisa">Indecisa</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTÓN GENERAR -->
+            <div class="text-center pt-2">
+                <button type="button" onclick="generarInformeApp()" class="bg-gradient-to-r from-indigo-700 to-slate-800 hover:from-indigo-800 hover:to-slate-900 text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition duration-200 flex items-center justify-center gap-3 mx-auto text-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> GENERAR INFORME CLÍNICO AUTOMÁTICO
+                </button>
+            </div>
+        </form>
+
+        <!-- RESULTADOS / FICHA FINAL -->
+        <section id="seccion-resultado" class="hidden mt-10 space-y-4">
+            <div class="flex flex-wrap justify-between items-center gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-file-medical text-emerald-600"></i> Informe Generado
+                </h3>
+                <div class="flex items-center gap-2">
+                    <button onclick="copiarTextoInforme()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-semibold py-2.5 px-4 rounded-lg shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-copy"></i> Copiar Texto
+                    </button>
+                    <button onclick="exportarPDF()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-2.5 px-4 rounded-lg shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> Descargar PDF
+                    </button>
+                </div>
+            </div>
+
+            <textarea id="rawTextInforme" class="hidden"></textarea>
+
+            <!-- VISTA DEL INFORME CON CRÉDITOS INCORPORADOS -->
+            <div id="pdfView" class="bg-white p-8 rounded-xl border border-slate-300 shadow-md font-mono text-xs text-slate-900 leading-relaxed space-y-4">
+                <!-- Se llena automáticamente vía JS -->
+            </div>
+        </section>
+
+        <!-- FOOTER GLOBAL -->
+        <footer class="mt-12 text-center text-xs text-slate-500 space-y-1">
+            <p class="font-semibold text-slate-600">Protocolo Ronald v2.0 &copy; 2026 — Algoritmo de Decisión Clínica</p>
+            <p class="text-[11px] text-slate-400">Co-diseñado e implementado con el soporte de Gemini AI Collaborator</p>
+        </footer>
+
+    </div>
+
+    <!-- SCRIPT CLÍNICO INTERACTIVO -->
+    <script>
+        let nombrePacienteGlobal = "Paciente";
+
+        function generarInformeApp() {
+            const nombre = document.getElementById('nombre').value || 'Paciente No Registrada';
+            nombrePacienteGlobal = nombre.replace(/ /g, "_");
+            const edad = parseInt(document.getElementById('edad').value) || '__';
+            const fur = document.getElementById('fur').value || '//_____';
+            const etapa = document.getElementById('etapa').value;
+
+            // MRS
+            let somatico = 0; [...document.querySelectorAll('.mrs-s')].forEach(i => somatico += parseInt(i.value));
+            let psicologico = 0; [...document.querySelectorAll('.mrs-p')].forEach(i => psicologico += parseInt(i.value));
+            let urogenital = 0; [...document.querySelectorAll('.mrs-u')].forEach(i => urogenital += parseInt(i.value));
+            let totalMRS = somatico + psicologico + urogenital;
+
+            let interpS = somatico <= 4 ? 'Leve' : (somatico <= 8 ? 'Moderado' : 'Severo');
+            let interpP = psicologico <= 3 ? 'Leve' : (psicologico <= 6 ? 'Moderado' : 'Severo');
+            let interpU = urogenital <= 3 ? 'Leve' : (urogenital <= 6 ? 'Moderado' : 'Severo');
+
+            let interpTotalMRS = 'Leves';
+            if (totalMRS >= 9 && totalMRS <= 14) interpTotalMRS = 'Moderados leves';
+            else if (totalMRS >= 15 && totalMRS <= 20) interpTotalMRS = 'Moderados severos';
+            else if (totalMRS > 20) interpTotalMRS = 'Severos';
+
+            let pctS = Math.round((somatico / 16) * 100) || 0;
+            let pctP = Math.round((psicologico / 12) * 100) || 0;
+            let pctU = Math.round((urogenital / 12) * 100) || 0;
+
+            let maxPct = Math.max(pctS, pctP, pctU);
+            let domPred = "Ninguno";
+            let analisisDom = "Sin prevalencia marcada.";
+
+            if (maxPct > 0) {
+                if (maxPct === pctS) { domPred = "Somático"; analisisDom = "SINTOMATOLOGÍA VASOMOTORA Y OSTEOMUSCULAR PREDOMINANTE. Indicación preferente de THM sistémica."; }
+                else if (maxPct === pctP) { domPred = "Psicológico"; analisisDom = "Afectación anímica prevalente. Descartar origen psicógeno independiente de la transición."; }
+                else if (maxPct === pctU) { domPred = "Urogenital"; analisisDom = "SÍNDROME GENITOURINARIO (SGUM) DOMINANTE. Evaluar THM tópica o sistémica según severidad."; }
+            }
+
+            // Bochornos
+            const bDia = parseInt(document.getElementById('bochornos-dia').value) || 0;
+            const bImp = parseInt(document.getElementById('bochornos-impacto').value) || 0;
+            let interpImp = bImp <= 3 ? 'Leve' : (bImp <= 6 ? 'Moderado' : 'Severo');
+
+            const sudor = document.getElementById('sint-sudor').checked ? 'Sí' : 'No';
+            const noche = document.getElementById('sint-noche').checked ? 'Sí' : 'No';
+            const act = document.getElementById('sint-act').checked ? 'Sí' : 'No';
+            const ropa = document.getElementById('sint-ropa').checked ? 'Sí' : 'No';
+
+            // Contraindicaciones
+            let absCount = 0; [...document.querySelectorAll('.cx-absoluta')].forEach(c => { if(c.checked) absCount++; });
+            const absText = absCount > 0 ? 'ALERTA: Contraindicación absoluta presente.' : 'Ninguna';
+            const relText = document.getElementById('cx-coronaria').checked ? 'Enfermedad coronaria activa (Evaluación por Cardiología)' : 'Ninguna';
+
+            // Riesgos
+            let rCardio = 0; [...document.querySelectorAll('.rf-cardio')].forEach(c => { if(c.checked) rCardio += parseInt(c.value); });
+            let rTrombo = 0; [...document.querySelectorAll('.rf-trombo')].forEach(c => { if(c.checked) rTrombo += parseInt(c.value); });
+            let rMama = 0; [...document.querySelectorAll('.rf-mama')].forEach(c => { if(c.checked) rMama += parseInt(c.value); });
+            let rTotal = rCardio + rTrombo + rMama;
+            let interpRiesgo = rTotal <= 2 ? 'RIESGO BAJO' : (rTotal <= 5 ? 'RIESGO INTERMEDIO' : 'RIESGO ALTO');
+
+            // Situaciones Especiales
+            let sitEsp = []; [...document.querySelectorAll('.sit-esp')].forEach(c => { if(c.checked) sitEsp.push(c.value); });
+            let sitEspText = sitEsp.length > 0 ? sitEsp.join(', ') : 'Ninguna';
+            const pref = document.getElementById('preferencia').value;
+
+            // Indicación
+            let indPuntos = 0;
+            if (edad < 60 || etapa === 'Posmenopausia <10 años') indPuntos++;
+            if (totalMRS >= 9) indPuntos++;
+            if (bDia >= 3) indPuntos++;
+            if (bImp >= 4) indPuntos++;
+            if (absCount === 0) indPuntos++;
+            if (interpRiesgo === 'RIESGO BAJO' || interpRiesgo === 'RIESGO INTERMEDIO') indPuntos++;
+            if (document.getElementById('se-osteo').checked) indPuntos++;
+            if (document.getElementById('se-precoz').checked || (edad > 0 && edad < 40)) indPuntos++;
+
+            let interpInd = 'NO HORMONAL';
+            let recFinal = 'Priorizar manejo no hormonal y modificaciones de estilo de vida.';
+
+            if (indPuntos >= 7) { interpInd = 'CANDIDATA IDEAL a THM'; recFinal = 'Indicar THM sistémica. Los beneficios superan ampliamente a los riesgos.'; }
+            else if (indPuntos >= 5) { interpInd = 'CANDIDATA CLARA a THM'; recFinal = 'Indicar THM. Evaluar idoneidad de tipo y vía según comorbilidades.'; }
+            else if (indPuntos >= 3) { interpInd = 'INDIVIDUALIZAR'; recFinal = 'Ponderar minuciosamente relación riesgo/beneficio con la paciente.'; }
+
+            if (absCount > 0) {
+                interpInd = 'NO HORMONAL (CONTRAINDICACIÓN ABSOLUTA)';
+                recFinal = 'CRÍTICO: THM Sistémica totalmente CONTRAINDICADA. Preferir alternativas no hormonales o estrógenos locales si se limita a síntomas genitourinarios.';
+            } else {
+                if (document.getElementById('se-migrana').checked) recFinal += '\n* Paciente con Migraña con aura: Prescribir exclusivamente VÍA TRANSDÉRMICA.';
+                if (sitEsp.includes('Endometriosis') || sitEsp.includes('Adenomiosis')) recFinal += '\n* Antecedente de Endometriosis/Adenomiosis: Utilizar ESQUEMA COMBINADO CONTINUO o DIU Mirena.';
+            }
+
+            // Construcción del Texto
+            const informeTexto = `===========================================================
+INFORME DE EVALUACIÓN MENOPÁUSICA - Protocolo Ronald v2.0
+Desarrollo Clínico: Protocolo Ronald | Motor: Gemini AI
+===========================================================
+Paciente: ${nombre} | Edad: ${edad} años | FUR: ${fur}
+Etapa: ${etapa}
+
+1. ESCALA MRS COMPLETA
+   Dominio Somático: ${somatico}/16 → ${interpS}
+   Dominio Psicológico: ${psicologico}/12 → ${interpP}
+   Dominio Urogenital: ${urogenital}/12 → ${interpU}
+   Puntaje TOTAL: ${totalMRS}/40 → ${interpTotalMRS}
+
+2. ANÁLISIS POR DOMINIO
+   ${domPred === 'Somático' ? '[X]' : '[ ]'} Somático predominante (${pctS}% del máx): ${domPred === 'Somático' ? analisisDom : 'No prevalente.'}
+   ${domPred === 'Psicológico' ? '[X]' : '[ ]'} Psicológico predominante (${pctP}% del máx): ${domPred === 'Psicológico' ? analisisDom : 'No prevalente.'}
+   ${domPred === 'Urogenital' ? '[X]' : '[ ]'} Urogenital predominante (${pctU}% del máx): ${domPred === 'Urogenital' ? analisisDom : 'No prevalente.'}
+
+3. BOCHORNOS
+   Episodios/día: ${bDia} | Impacto: ${bImp}/10 → ${interpImp}
+   Sudoración: ${sudor}              | Despierta por noche: ${noche}
+   Interrumpe actividades: ${act}  | Debe cambiarse de ropa: ${ropa}
+
+4. CONTRANDICACIONES
+   Absolutas: ${absText}
+   Relativas: ${relText}
+
+5. RIESGOS PONDERADOS
+   Cardiovascular: ${rCardio} pts
+   Tromboembólico: ${rTrombo} pts
+   Cáncer mama: ${rMama} pts
+   RIESGO TOTAL: ${rTotal} pts → ${interpRiesgo}
+
+6. SITUACIONES ESPECIALES
+   ${sitEspText}
+
+7. PREFERENCIA DE LA PACIENTE
+   ${pref}
+
+8. PUNTAJE DE INDICACIÓN (8 criterios)
+   Puntaje: ${indPuntos}/8 → ${interpInd}
+===========================================================
+RECOMENDACIÓN FINAL:
+${recFinal}
+===========================================================`;
+
+            document.getElementById('rawTextInforme').value = informeTexto;
+            document.getElementById('pdfView').innerHTML = informeTexto.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
+            document.getElementById('seccion-resultado').classList.remove('hidden');
+            document.getElementById('seccion-resultado').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copiarTextoInforme() {
+            const raw = document.getElementById('rawTextInforme');
+            raw.select();
+            document.execCommand('copy');
+            alert('¡Informe copiado al portapapeles!');
+        }
+
+        function exportarPDF() {
+            const el = document.getElementById('pdfView');
+            const opt = {
+                margin:       12,
+                filename:     `Protocolo_Ronald_${nombrePacienteGlobal}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(el).save();
+        }
+    </script>
+</body>
+</html>

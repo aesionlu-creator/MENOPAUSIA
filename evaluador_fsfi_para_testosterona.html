@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluador Clínico Completo FSFI - Dr. Ronald & Gemini AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+    <div class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-teal-800 to-cyan-900 rounded-2xl p-6 md:p-8 text-white shadow-xl border border-teal-900/20 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <span class="bg-teal-500/30 text-teal-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cuestionario Oficial e Interactivo</span>
+                    <h1 class="text-3xl md:text-4xl font-extrabold mt-2 tracking-tight">Índice de Función Sexual Femenina (FSFI)</h1>
+                    <p class="text-teal-100 text-sm md:text-base mt-2 max-w-2xl">
+                        Evaluación científica autoadministrada de 19 ítems para el diagnóstico del TDSH y candidatura a terapia con Testosterona.
+                    </p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 text-xs text-left md:text-right shrink-0">
+                    <p class="font-medium text-teal-200 uppercase tracking-wider">Herramienta Clínica Diseñada por:</p>
+                    <p class="font-bold text-white text-base mt-0.5">Dr. Ronald</p>
+                    <p class="text-teal-100/70 text-xs">Ginecología y Obstetricia</p>
+                    <div class="border-t border-white/15 my-2"></div>
+                    <p class="text-teal-200 font-medium">Soporte Tecnológico:</p>
+                    <p class="font-semibold text-white">Gemini AI • 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN LAYOUT -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Clinical Criteria Checkboxes (Consensus 2019) -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-teal-700 flex items-center gap-2">
+                        <span class="p-1 rounded-md bg-teal-50 text-teal-700">📋</span>
+                        1. Criterios Clínicos del Consenso Global 2019
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-teal-500 cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-postmenopause" class="mt-1 h-5 w-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" checked>
+                            <span class="text-xs text-slate-700 leading-normal">La paciente es <strong>posmenopáusica</strong> (natural, quirúrgica o inducida).</span>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-teal-500 cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-distress" class="mt-1 h-5 w-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" checked>
+                            <span class="text-xs text-slate-700 leading-normal">La baja del deseo le genera un <strong>malestar o angustia clínicamente significativa</strong>.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Interactive Progress Bar -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+                    <div class="w-full bg-slate-100 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-teal-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <span id="progress-text" class="text-xs font-bold text-teal-800 whitespace-nowrap bg-teal-50 px-2.5 py-1 rounded-full">0 / 19 Respondidas</span>
+                </div>
+
+                <!-- Questions Container -->
+                <div id="questions-form" class="space-y-6">
+                    <!-- Dynamic rendering of the 19 questions will be injected here by Javascript -->
+                </div>
+
+            </div>
+
+            <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-6">
+                
+                <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl border border-slate-800 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold uppercase tracking-widest text-teal-400">Análisis del FSFI en Tiempo Real</h2>
+                        <button onclick="resetAll()" class="text-xs text-slate-400 hover:text-white underline transition-colors">Reiniciar Test</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-3">
+                        
+                        <!-- Deseo -->
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">1. Deseo</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.6</span>
+                                </div>
+                                <p id="score-desire" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-desire" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
+
+                        <!-- Excitación -->
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">2. Excitación</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.3</span>
+                                </div>
+                                <p id="score-arousal" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-arousal" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
+
+                        <!-- Lubricación -->
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">3. Lubricación</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.3</span>
+                                </div>
+                                <p id="score-lubrication" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-lubrication" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
+
+                        <!-- Orgasmo -->
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">4. Orgasmo</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.4</span>
+                                </div>
+                                <p id="score-orgasm" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-orgasm" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
+
+                        <!-- Satisfacción -->
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">5. Satisfacción</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.4</span>
+                                </div>
+                                <p id="score-satisfaction" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-satisfaction" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
+
+                        <!-- Dolor -->
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">6. Dolor Coital</span>
+                                    <span class="text-[9px] text-teal-400 font-mono">Factor x0.4</span>
+                                </div>
+                                <p id="score-pain" class="text-xl font-bold text-white mt-1">0.00</p>
+                            </div>
+                            <span id="badge-pain" class="text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit">Pendiente</span>
+                        </div>
+
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                        <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">PUNTAJE GLOBAL FSFI</p>
+                        <p id="score-total" class="text-5xl font-extrabold text-white mt-1.5">0.00</p>
+                        <p class="text-[11px] text-teal-300 mt-1.5">Diagnóstico de Disfunción Sexual si es ≤ 26.55 puntos</p>
+                    </div>
+
+                    <!-- Clinical Verdict Alert Box -->
+                    <div id="verdict-card" class="p-4 rounded-xl border text-center transition-all duration-300 bg-slate-800 text-slate-300 border-slate-700">
+                        <p class="text-xs uppercase tracking-wider font-bold" id="verdict-title">Evaluando Datos...</p>
+                        <p class="text-sm font-semibold mt-1" id="verdict-body">Por favor, complete las 19 preguntas del test.</p>
+                    </div>
+
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                            <span>📝</span> Nota Clínica para Epicrisis / Historia
+                        </h2>
+                        <button onclick="copyClinicalNote()" class="text-xs bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold px-2.5 py-1.5 rounded-lg border border-teal-200 flex items-center gap-1 transition-colors">
+                            <span>Copiar nota</span>
+                        </button>
+                    </div>
+                    <textarea id="clinical-note" rows="6" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[11px] font-mono text-slate-600 focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-text" readonly></textarea>
+                    <p id="copy-success-msg" class="text-xs text-emerald-600 font-semibold text-center hidden">¡Nota clínica copiada con éxito!</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Database of exact translations and coefficients of the FSFI scale
+        const DOMAINS_SPEC = [
+            { id: "desire", name: "Deseo", questions: [1, 2], factor: 0.6, criteria: "≤ 3.3 es Deseo Bajo" },
+            { id: "arousal", name: "Excitación", questions: [3, 4, 5, 6], factor: 0.3, criteria: "" },
+            { id: "lubrication", name: "Lubricación", questions: [7, 8, 9, 10], factor: 0.3, criteria: "" },
+            { id: "orgasm", name: "Orgasmo", questions: [11, 12, 13], factor: 0.4, criteria: "" },
+            { id: "satisfaction", name: "Satisfacción", questions: [14, 15, 16], factor: 0.4, criteria: "" },
+            { id: "pain", name: "Dolor Coital", questions: [17, 18, 19], factor: 0.4, criteria: "≤ 4.0 es Dolor Alto" }
+        ];
+
+        const QUESTIONS_DATABASE = [
+            {
+                id: 1,
+                domain: "desire",
+                question: "1. ¿Con qué frecuencia sintió deseo o interés sexual?",
+                options: [
+                    { value: 5, label: "Casi siempre o siempre" },
+                    { value: 4, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 2, label: "Pocas veces" },
+                    { value: 1, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 2,
+                domain: "desire",
+                question: "2. ¿Cómo calificaría su nivel de deseo o interés sexual?",
+                options: [
+                    { value: 5, label: "Muy alto" },
+                    { value: 4, label: "Alto" },
+                    { value: 3, label: "Moderado" },
+                    { value: 2, label: "Bajo" },
+                    { value: 1, label: "Muy bajo o nulo" }
+                ]
+            },
+            {
+                id: 3,
+                domain: "arousal",
+                question: "3. ¿Con qué frecuencia se sintió sexualmente excitada durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Casi siempre o siempre" },
+                    { value: 4, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 2, label: "Pocas veces" },
+                    { value: 1, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 4,
+                domain: "arousal",
+                question: "4. ¿Cómo calificaría su nivel de excitación sexual durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Muy alto" },
+                    { value: 4, label: "Alto" },
+                    { value: 3, label: "Moderado" },
+                    { value: 2, label: "Bajo" },
+                    { value: 1, label: "Muy bajo o nulo" }
+                ]
+            },
+            {
+                id: 5,
+                domain: "arousal",
+                question: "5. ¿Con qué frecuencia se sintió satisfecha con su nivel de excitación durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Casi siempre o siempre" },
+                    { value: 4, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 2, label: "Pocas veces" },
+                    { value: 1, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 6,
+                domain: "arousal",
+                question: "6. ¿Con qué frecuencia se sintió confiada en lograr la excitación sexual durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Casi siempre o siempre" },
+                    { value: 4, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 2, label: "Pocas veces" },
+                    { value: 1, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 7,
+                domain: "lubrication",
+                question: "7. ¿Con qué frecuencia se lubricó ('se mojó') durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Casi siempre o siempre" },
+                    { value: 4, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 2, label: "Pocas veces" },
+                    { value: 1, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 8,
+                domain: "lubrication",
+                question: "8. ¿Cómo calificaría su dificultad para lograr la lubricación durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 1, label: "Mucho o extremadamente difícil" },
+                    { value: 2, label: "Muy difícil" },
+                    { value: 3, label: "Difícil" },
+                    { value: 4, label: "Un poco difícil" },
+                    { value: 5, label: "Nada difícil" }
+                ]
+            },
+            {
+                id: 9,
+                domain: "lubrication",
+                question: "9. ¿Con qué frecuencia mantuvo la lubricación hasta el final de la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Casi siempre o siempre" },
+                    { value: 4, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 2, label: "Pocas veces" },
+                    { value: 1, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 10,
+                domain: "lubrication",
+                question: "10. ¿Cómo calificaría su dificultad para mantener la lubricación hasta el final de la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 1, label: "Mucho o extremadamente difícil" },
+                    { value: 2, label: "Muy difícil" },
+                    { value: 3, label: "Difícil" },
+                    { value: 4, label: "Un poco difícil" },
+                    { value: 5, label: "Nada difícil" }
+                ]
+            },
+            {
+                id: 11,
+                domain: "orgasm",
+                question: "11. ¿Con qué frecuencia llegó al orgasmo (clímax) durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Casi siempre o siempre" },
+                    { value: 4, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 2, label: "Pocas veces" },
+                    { value: 1, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 12,
+                domain: "orgasm",
+                question: "12. ¿Cómo calificaría su dificultad para alcanzar el orgasmo durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 1, label: "Mucho o extremadamente difícil" },
+                    { value: 2, label: "Muy difícil" },
+                    { value: 3, label: "Difícil" },
+                    { value: 4, label: "Un poco difícil" },
+                    { value: 5, label: "Nada difícil" }
+                ]
+            },
+            {
+                id: 13,
+                domain: "orgasm",
+                question: "13. ¿Qué tan satisfecha estuvo con su capacidad para alcanzar el orgasmo durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Muy satisfecha" },
+                    { value: 4, label: "Moderadamente satisfecha" },
+                    { value: 3, label: "Ni satisfecha ni insatisfecha" },
+                    { value: 2, label: "Moderadamente insatisfecha" },
+                    { value: 1, label: "Muy insatisfecha" }
+                ]
+            },
+            {
+                id: 14,
+                domain: "satisfaction",
+                question: "14. ¿Qué tan satisfecha estuvo con la cercanía emocional entre usted y su pareja durante la actividad sexual?",
+                options: [
+                    { value: 0, label: "No hubo actividad sexual" },
+                    { value: 5, label: "Muy satisfecha" },
+                    { value: 4, label: "Moderadamente satisfecha" },
+                    { value: 3, label: "Ni satisfecha ni insatisfecha" },
+                    { value: 2, label: "Moderadamente insatisfecha" },
+                    { value: 1, label: "Muy insatisfecha" }
+                ]
+            },
+            {
+                id: 15,
+                domain: "satisfaction",
+                question: "15. ¿Qué tan satisfecha estuvo con su relación sexual con su pareja?",
+                options: [
+                    { value: 5, label: "Muy satisfecha" },
+                    { value: 4, label: "Moderadamente satisfecha" },
+                    { value: 3, label: "Ni satisfecha ni insatisfecha" },
+                    { value: 2, label: "Moderadamente insatisfecha" },
+                    { value: 1, label: "Muy insatisfecha" }
+                ]
+            },
+            {
+                id: 16,
+                domain: "satisfaction",
+                question: "16. ¿Qué tan satisfecha estuvo con su vida sexual en general?",
+                options: [
+                    { value: 5, label: "Muy satisfecha" },
+                    { value: 4, label: "Moderadamente satisfecha" },
+                    { value: 3, label: "Ni satisfecha ni insatisfecha" },
+                    { value: 2, label: "Moderadamente insatisfecha" },
+                    { value: 1, label: "Muy insatisfecha" }
+                ]
+            },
+            {
+                id: 17,
+                domain: "pain",
+                question: "17. ¿Con qué frecuencia experimentó dolor o malestar durante la penetración vaginal?",
+                options: [
+                    { value: 0, label: "No hubo penetración" },
+                    { value: 1, label: "Casi siempre o siempre" },
+                    { value: 2, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 4, label: "Pocas veces" },
+                    { value: 5, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 18,
+                domain: "pain",
+                question: "18. ¿Con qué frecuencia experimentó dolor o malestar después de la penetración vaginal?",
+                options: [
+                    { value: 0, label: "No hubo penetración" },
+                    { value: 1, label: "Casi siempre o siempre" },
+                    { value: 2, label: "La mayoría de las veces" },
+                    { value: 3, label: "A veces" },
+                    { value: 4, label: "Pocas veces" },
+                    { value: 5, label: "Casi nunca o nunca" }
+                ]
+            },
+            {
+                id: 19,
+                domain: "pain",
+                question: "19. ¿Cómo calificaría el nivel de dolor o malestar durante o después de la penetración vaginal?",
+                options: [
+                    { value: 0, label: "No hubo penetración" },
+                    { value: 1, label: "Muy alto o insoportable" },
+                    { value: 2, label: "Alto" },
+                    { value: 3, label: "Moderado" },
+                    { value: 4, label: "Bajo" },
+                    { value: 5, label: "Muy bajo o nulo" }
+                ]
+            }
+        ];
+
+        // State Store
+        let state = {
+            responses: {}, // key: questionId, value: numeric response
+            postmenopause: true,
+            distress: true
+        };
+
+        function renderQuestions() {
+            const formContainer = document.getElementById('questions-form');
+            formContainer.innerHTML = '';
+
+            // Group questions by domain for premium modular visualization
+            DOMAINS_SPEC.forEach(domain => {
+                const domainQuestions = QUESTIONS_DATABASE.filter(q => q.domain === domain.id);
+                
+                const domainCard = document.createElement('div');
+                domainCard.className = "bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6";
+                
+                // Header of Domain Card
+                const cardHeader = document.createElement('div');
+                cardHeader.className = "bg-slate-50 border-b border-slate-200 p-4 flex justify-between items-center";
+                cardHeader.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                        <h3 class="font-bold text-slate-800 text-sm md:text-base">Dominio: ${domain.name}</h3>
+                    </div>
+                    <span class="text-[10px] bg-teal-50 text-teal-700 font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">Peso: x${domain.factor}</span>
+                `;
+                domainCard.appendChild(cardHeader);
+
+                // Body containing questions
+                const cardBody = document.createElement('div');
+                cardBody.className = "p-4 md:p-6 space-y-6";
+
+                domainQuestions.forEach(q => {
+                    const qElement = document.createElement('div');
+                    qElement.className = "space-y-3";
+                    qElement.innerHTML = `
+                        <p class="text-xs md:text-sm font-semibold text-slate-700 leading-relaxed">${q.question}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2" id="options-group-${q.id}"></div>
+                    `;
+                    
+                    const optionsGroup = qElement.querySelector(`#options-group-${q.id}`);
+                    
+                    q.options.forEach(opt => {
+                        const optButton = document.createElement('button');
+                        optButton.type = "button";
+                        optButton.id = `q-${q.id}-opt-${opt.value}`;
+                        optButton.className = "flex items-center justify-between p-3 rounded-xl border border-slate-200 text-left text-xs hover:border-teal-500 hover:bg-slate-50 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                        optButton.innerHTML = `
+                            <span class="text-slate-600 font-medium">${opt.label}</span>
+                            <span class="bg-slate-100 text-slate-500 font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2">Puntos: ${opt.value}</span>
+                        `;
+                        
+                        optButton.addEventListener('click', () => {
+                            selectOption(q.id, opt.value, domain.id);
+                        });
+
+                        optionsGroup.appendChild(optButton);
+                    });
+
+                    cardBody.appendChild(qElement);
+                });
+
+                domainCard.appendChild(cardBody);
+                formContainer.appendChild(domainCard);
+            });
+        }
+
+        function selectOption(questionId, value, domainId) {
+            state.responses[questionId] = value;
+            
+            // UI visual update: remove selected styles from siblings and apply to target
+            const questionData = QUESTIONS_DATABASE.find(q => q.id === questionId);
+            questionData.options.forEach(opt => {
+                const btn = document.getElementById(`q-${questionId}-opt-${opt.value}`);
+                if (btn) {
+                    btn.className = "flex items-center justify-between p-3 rounded-xl border border-slate-200 text-left text-xs hover:border-teal-500 hover:bg-slate-50 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                    const badge = btn.querySelector('span:last-child');
+                    if (badge) {
+                        badge.className = "bg-slate-100 text-slate-500 font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2";
+                    }
+                }
+            });
+
+            const activeBtn = document.getElementById(`q-${questionId}-opt-${value}`);
+            if (activeBtn) {
+                activeBtn.className = "flex items-center justify-between p-3 rounded-xl border-2 border-teal-600 bg-teal-50/40 text-left text-xs transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                const badge = activeBtn.querySelector('span:last-child');
+                if (badge) {
+                    badge.className = "bg-teal-600 text-white font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2";
+                }
+            }
+
+            calculateResults();
+        }
+
+        function calculateResults() {
+            let totalWeightedScore = 0;
+            let answeredCount = 0;
+            
+            const domainScores = {};
+
+            // Calculate subtotals per domain
+            DOMAINS_SPEC.forEach(domain => {
+                let domainSum = 0;
+                let domainAnswered = 0;
+
+                domain.questions.forEach(qId => {
+                    if (state.responses[qId] !== undefined) {
+                        domainSum += state.responses[qId];
+                        domainAnswered++;
+                    }
+                });
+
+                // Compute weighted value if all domain items are fully answered
+                const isDomainComplete = domainAnswered === domain.questions.length;
+                const weighted = domainSum * domain.factor;
+                
+                domainScores[domain.id] = {
+                    sum: domainSum,
+                    weighted: weighted,
+                    isComplete: isDomainComplete
+                };
+
+                if (isDomainComplete) {
+                    answeredCount += domainAnswered;
+                    totalWeightedScore += weighted;
+                }
+
+                // Update UI for each domain
+                const scoreEl = document.getElementById(`score-${domain.id}`);
+                const badgeEl = document.getElementById(`badge-${domain.id}`);
+                
+                if (scoreEl && badgeEl) {
+                    scoreEl.textContent = weighted.toFixed(2);
+                    
+                    if (isDomainComplete) {
+                        // Color coding specific domains
+                        if (domain.id === 'desire') {
+                            if (weighted <= 3.3) {
+                                badgeEl.textContent = "Deseo Bajo (TDSH)";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 w-fit";
+                            } else {
+                                badgeEl.textContent = "Deseo Normal";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 w-fit";
+                            }
+                        } else if (domain.id === 'pain') {
+                            if (weighted <= 4.0) {
+                                badgeEl.textContent = "Dispareunia Activa";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300 w-fit";
+                            } else {
+                                badgeEl.textContent = "Sin dolor limitante";
+                                badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 w-fit";
+                            }
+                        } else {
+                            badgeEl.textContent = "Completo";
+                            badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-teal-500/20 text-teal-300 w-fit";
+                        }
+                    } else {
+                        scoreEl.textContent = "0.00";
+                        badgeEl.textContent = "Incompleto";
+                        badgeEl.className = "text-[9px] mt-1.5 px-2 py-0.5 rounded font-bold bg-slate-700/50 text-slate-400 w-fit";
+                    }
+                }
+            });
+
+            // Update Progress Bar
+            const totalQuestionsCount = QUESTIONS_DATABASE.length;
+            const progressPct = (answeredCount / totalQuestionsCount) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPct}%`;
+            document.getElementById('progress-text').textContent = `${answeredCount} / ${totalQuestionsCount} Respondidas`;
+
+            // Global score element update
+            const scoreTotalEl = document.getElementById('score-total');
+            if (scoreTotalEl) {
+                scoreTotalEl.textContent = totalWeightedScore.toFixed(2);
+            }
+
+            const isPostmenopause = document.getElementById('chk-postmenopause').checked;
+            const hasDistress = document.getElementById('chk-distress').checked;
+            
+            const verdictCard = document.getElementById('verdict-card');
+            const verdictTitle = document.getElementById('verdict-title');
+            const verdictBody = document.getElementById('verdict-body');
+
+            const isAllAnswered = answeredCount === totalQuestionsCount;
+
+            if (!isAllAnswered) {
+                verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-slate-800 text-slate-300 border-slate-700";
+                verdictTitle.textContent = "Evaluando Datos...";
+                verdictBody.textContent = `Por favor, complete las ${totalQuestionsCount - answeredCount} preguntas pendientes.`;
+            } else {
+                const desireScore = domainScores['desire'].weighted;
+                const painScore = domainScores['pain'].weighted;
+
+                if (!isPostmenopause || !hasDistress) {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-rose-950/40 text-rose-300 border-rose-900";
+                    verdictTitle.textContent = "No Candidata (Requisitos Excluidos)";
+                    verdictBody.textContent = "La terapia con testosterona solo se indica bajo el Consenso Global en pacientes posmenopáusicas con malestar clínico manifiesto.";
+                } else if (painScore <= 4.0) {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-amber-950/40 text-amber-300 border-amber-900";
+                    verdictTitle.textContent = "Tratar Dispareunia Primero";
+                    verdictBody.textContent = `La paciente tiene dolor coital significativo (${painScore.toFixed(2)} pts). Priorice resolver la atrofia con estrógenos tópicos locales antes de evaluar testosterona.`;
+                } else if (desireScore > 3.3) {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-rose-950/40 text-rose-300 border-rose-900";
+                    verdictTitle.textContent = "No Candidata (Deseo Conservado)";
+                    verdictBody.textContent = `El subtotal de deseo (${desireScore.toFixed(2)} pts) es mayor al límite diagnóstico de ≤ 3.3. No califica para TDSH.`;
+                } else {
+                    verdictCard.className = "p-4 rounded-xl border text-center transition-all duration-300 bg-emerald-950/40 text-emerald-300 border-emerald-900";
+                    verdictTitle.textContent = "✓ Candidata Apta para Testosterona";
+                    verdictBody.textContent = `Cumple criterios: Deseo bajo (${desireScore.toFixed(2)} pts), sin dolor coital limitante y estatus posmenopáusico con malestar. Solicitar laboratorios pre-tratamiento.`;
+                }
+            }
+
+            generateClinicalNote(domainScores, totalWeightedScore, isAllAnswered, isPostmenopause, hasDistress);
+        }
+
+        function generateClinicalNote(domainScores, totalScore, isComplete, isPostmenopause, hasDistress) {
+            const noteEl = document.getElementById('clinical-note');
+            if (!noteEl) return;
+
+            if (!isComplete) {
+                noteEl.value = "Complete el test completo con la paciente para estructurar la nota médica automática.";
+                return;
+            }
+
+            const dateStr = new Date().toLocaleDateString('es-ES');
+            const desireVal = domainScores['desire'].weighted;
+            const arousalVal = domainScores['arousal'].weighted;
+            const lubVal = domainScores['lubrication'].weighted;
+            const orgVal = domainScores['orgasm'].weighted;
+            const satVal = domainScores['satisfaction'].weighted;
+            const painVal = domainScores['pain'].weighted;
+
+            let conclusionStr = "";
+            if (!isPostmenopause || !hasDistress) {
+                conclusionStr = "No candidata a terapia androgénica (No cumple criterios basales de posmenopausia y distress).";
+            } else if (painVal <= 4.0) {
+                conclusionStr = "No apta para testosterona en este momento. Se sospecha dispareunia / atrofia urogenital severa como causa de la pérdida del deseo. Tratar primero la mucosa local.";
+            } else if (desireVal > 3.3) {
+                conclusionStr = "No cumple criterios de TDSH (Deseo sexual conservado según FSFI).";
+            } else {
+                conclusionStr = "Apta para terapia con Testosterona Transdérmica Femenina (1/10 dosis de varón). Solicitar testosterona total, SHBG, perfil hepático y mamografía vigente antes de iniciar.";
+            }
+
+            const noteText = `REPORTE CLÍNICO - ÍNDICE DE FUNCIÓN SEXUAL FEMENINA (FSFI)
+======================================================
+Fecha de Evaluación: ${dateStr}
+Criterio Clínico Basal: ${isPostmenopause ? 'Posmenopáusica' : 'Premenopáusica'} | Distress Sexual: ${hasDistress ? 'SÍ' : 'NO'}
+
+SUBTOTALES DE DOMINIOS FSFI:
+------------------------------------------------------
+- DESEO: ${desireVal.toFixed(2)} pts  (Umbral de sospecha TDSH: <= 3.3)
+- EXCITACIÓN: ${arousalVal.toFixed(2)} pts
+- LUBRICACIÓN: ${lubVal.toFixed(2)} pts
+- ORGASMO: ${orgVal.toFixed(2)} pts
+- SATISFACCIÓN: ${satVal.toFixed(2)} pts
+- DOLOR COITAL: ${painVal.toFixed(2)} pts  (Disfunción por dispareunia: <= 4.0)
+
+PUNTAJE GLOBAL FSFI: ${totalScore.toFixed(2)} pts  (Disfunción si <= 26.55)
+
+DIAGNÓSTICO Y PLAN DE MANEJO RECOMENDADO:
+------------------------------------------------------
+${conclusionStr}
+
+------------------------------------------------------
+Co-diseñado para la práctica clínica por:
+Dr. Ronald (Ginecología y Obstetricia) & Gemini AI`;
+
+            noteEl.value = noteText;
+        }
+
+        function copyClinicalNote() {
+            const textarea = document.getElementById('clinical-note');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // Mobile compatibility
+            
+            try {
+                document.execCommand('copy');
+                const msg = document.getElementById('copy-success-msg');
+                msg.classList.remove('hidden');
+                setTimeout(() => {
+                    msg.classList.add('hidden');
+                }, 3000);
+            } catch (err) {
+                console.error("Error al copiar nota: ", err);
+            }
+        }
+
+        function resetAll() {
+            state.responses = {};
+            document.getElementById('chk-postmenopause').checked = true;
+            document.getElementById('chk-distress').checked = true;
+            
+            // Re-render
+            renderQuestions();
+            calculateResults();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Prepopulate Mock Data (Typical TDSH Patient for Demo)
+        function loadDemoPatient() {
+            // Patient with low desire (Q1=2, Q2=2 => Desire = 2.4)
+            state.responses[1] = 2;
+            state.responses[2] = 2;
+            
+            // Moderate Arousal
+            state.responses[3] = 3;
+            state.responses[4] = 3;
+            state.responses[5] = 2;
+            state.responses[6] = 3;
+
+            // Good Lubrication
+            state.responses[7] = 4;
+            state.responses[8] = 4;
+            state.responses[9] = 4;
+            state.responses[10] = 4;
+
+            // Orgasm
+            state.responses[11] = 3;
+            state.responses[12] = 3;
+            state.responses[13] = 3;
+
+            // Satisfaction
+            state.responses[14] = 3;
+            state.responses[15] = 3;
+            state.responses[16] = 2;
+
+            // No Pain (High score in Pain domain means NO pain)
+            state.responses[17] = 5;
+            state.responses[18] = 5;
+            state.responses[19] = 5;
+
+            renderQuestions();
+
+            // Programmatically highlight selected options in UI
+            Object.keys(state.responses).forEach(qId => {
+                const val = state.responses[qId];
+                const activeBtn = document.getElementById(`q-${qId}-opt-${val}`);
+                if (activeBtn) {
+                    activeBtn.className = "flex items-center justify-between p-3 rounded-xl border-2 border-teal-600 bg-teal-50/40 text-left text-xs transition-all focus:outline-none focus:ring-2 focus:ring-teal-500";
+                    const badge = activeBtn.querySelector('span:last-child');
+                    if (badge) {
+                        badge.className = "bg-teal-600 text-white font-bold text-[10px] px-2 py-1 rounded-md shrink-0 ml-2";
+                    }
+                }
+            });
+
+            calculateResults();
+        }
+
+        // Initialize App on Load
+        window.onload = function() {
+            renderQuestions();
+            
+            // Listen to checkboxes changes
+            document.getElementById('chk-postmenopause').addEventListener('change', calculateResults);
+            document.getElementById('chk-distress').addEventListener('change', calculateResults);
+            
+            // Load typical demo candidate so clinician immediately sees how calculations work
+            loadDemoPatient();
+        };
+    </script>
+
+</body>
+</html>
