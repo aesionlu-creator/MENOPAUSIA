@@ -418,109 +418,125 @@ html_code = """
     </div>
 
     <script>
-        function switchTab(tab) {
-            const tabThm = document.getElementById('tab-thm');
-            const tabFsfi = document.getElementById('tab-fsfi');
-            const btnThm = document.getElementById('btn-tab-thm');
-            const btnFsfi = document.getElementById('btn-tab-fsfi');
+       function switchTab(tab) {
+      const tabThm = document.getElementById('tab-thm');
+      const tabFsfi = document.getElementById('tab-fsfi');
+      const btnThm = document.getElementById('btn-tab-thm');
+      const btnFsfi = document.getElementById('btn-tab-fsfi');
 
-            if (tab === 'thm') {
-                tabThm.classList.remove('hidden');
-                tabFsfi.classList.add('hidden');
-                btnThm.classList.add('active');
-                btnFsfi.classList.remove('active');
-            } else {
-                tabFsfi.classList.remove('hidden');
-                tabThm.classList.add('hidden');
-                btnFsfi.classList.add('active');
-                btnThm.classList.remove('active');
-            }
-        }
+      if (!tabThm || !tabFsfi) return;
 
-        let nombrePacienteGlobal = "Paciente";
+      if (tab === 'thm') {
+        tabThm.classList.remove('hidden');
+        tabFsfi.classList.add('hidden');
+        if (btnThm) btnThm.classList.add('active');
+        if (btnFsfi) btnFsfi.classList.remove('active');
+      } else {
+        tabFsfi.classList.remove('hidden');
+        tabThm.classList.add('hidden');
+        if (btnFsfi) btnFsfi.classList.add('active');
+        if (btnThm) btnThm.classList.remove('active');
+      }
+    }
 
-        function generarInformeApp() {
-            const nombre = document.getElementById('nombre').value || 'Paciente No Registrada';
-            nombrePacienteGlobal = nombre.replace(/ /g, "_");
-            const edad = parseInt(document.getElementById('edad').value) || '__';
-            const fur = document.getElementById('fur').value || '//_____';
-            const etapa = document.getElementById('etapa').value;
+    let nombrePacienteGlobal = 'Paciente';
 
-            let somatico = 0; [...document.querySelectorAll('.mrs-s')].forEach(i => somatico += parseInt(i.value));
-            let psicologico = 0; [...document.querySelectorAll('.mrs-p')].forEach(i => psicologico += parseInt(i.value));
-            let urogenital = 0; [...document.querySelectorAll('.mrs-u')].forEach(i => urogenital += parseInt(i.value));
-            let totalMRS = somatico + psicologico + urogenital;
+    function generarInformeApp() {
+      const nombre = document.getElementById('nombre')?.value || 'Paciente No Registrada';
+      nombrePacienteGlobal = nombre.replace(/ /g, '_');
+      const edad = parseInt(document.getElementById('edad')?.value) || '--';
+      const fur = document.getElementById('fur')?.value || 'No precisa';
+      const etapa = document.getElementById('etapa')?.value || '--';
 
-            let interpS = somatico <= 4 ? 'Leve' : (somatico <= 8 ? 'Moderado' : 'Severo');
-            let interpP = psicologico <= 3 ? 'Leve' : (psicologico <= 6 ? 'Moderado' : 'Severo');
-            let interpU = urogenital <= 3 ? 'Leve' : (urogenital <= 6 ? 'Moderado' : 'Severo');
+      let somatico = 0; [...document.querySelectorAll('.mrs-s')].forEach(i => somatico += parseInt(i.value || 0));
+      let psicologico = 0; [...document.querySelectorAll('.mrs-p')].forEach(i => psicologico += parseInt(i.value || 0));
+      let urogenital = 0; [...document.querySelectorAll('.mrs-u')].forEach(i => urogenital += parseInt(i.value || 0));
+      const totalMRS = somatico + psicologico + urogenital;
 
-            let interpTotalMRS = 'Leves';
-            if (totalMRS >= 9 && totalMRS <= 14) interpTotalMRS = 'Moderados leves';
-            else if (totalMRS >= 15 && totalMRS <= 20) interpTotalMRS = 'Moderados severos';
-            else if (totalMRS > 20) interpTotalMRS = 'Severos';
+      let absCount = 0;
+      [...document.querySelectorAll('.rx-absoluta')].forEach(r => { if (r.checked) absCount++; });
 
-            let pctS = Math.round((somatico / 16) * 100) || 0;
-            let pctP = Math.round((psicologico / 12) * 100) || 0;
-            let pctU = Math.round((urogenital / 12) * 100) || 0;
+      let rCardio = 0; [...document.querySelectorAll('.rf-cardio')].forEach(c => { if (c.checked) rCardio += parseInt(c.value || 0); });
+      let rTrombo = 0; [...document.querySelectorAll('.rf-trombo')].forEach(r => { if (r.checked) rTrombo += parseInt(r.value || 0); });
+      let rMama = 0; [...document.querySelectorAll('.rf-mama')].forEach(c => { if (c.checked) rMama += parseInt(c.value || 0); });
+      const rTotal = rCardio + rTrombo + rMama;
 
-            let maxPct = Math.max(pctS, pctP, pctU);
-            let domPred = "Ninguno";
-            let analisisDom = "Sin prevalencia marcada.";
+      let indPuntos = 0;
+      if (edad < 60 || etapa === 'Postmenopausia <10 años') indPuntos++;
+      if (totalMRS > 0) indPuntos++;
+      if (absCount === 0) indPuntos++;
 
-            if (maxPct > 0) {
-                if (maxPct === pctS) { domPred = "Somático"; analisisDom = "SINTOMATOLOGÍA VASOMOTORA Y OSTEOMUSCULAR PREDOMINANTE. Indicación preferente de THM sistémica."; }
-                else if (maxPct === pctP) { domPred = "Psicológico"; analisisDom = "Afectación anímica prevalente. Descartar origen psicógeno independiente de la transición."; }
-                else if (maxPct === pctU) { domPred = "Urogenital"; analisisDom = "SÍNDROME GENITOURINARIO (SGUM) DOMINANTE. Evaluar THM tópica o sistémica según severidad."; }
-            }
+      let interpInd = 'SIN HORMONAL';
+      let recFinal = 'Priorizar manejo no hormonal y modificaciones de estilo de vida.';
 
-            const bDia = parseInt(document.getElementById('bochornos-dia').value) || 0;
-            const bImp = parseInt(document.getElementById('bochornos-impacto').value) || 0;
-            let interpImp = bImp <= 3 ? 'Leve' : (bImp <= 6 ? 'Moderado' : 'Severo');
+      if (absCount > 0) {
+        interpInd = 'NO HORMONAL (CONTRAINDICACIÓN ABSOLUTA)';
+        recFinal = 'CRÍTICO: THM Sistémica totalmente CONTRAINDICADA. Preferir alternativas no hormonales o estrógenos locales si se limita a los síntomas genitourinarios.';
+      } else if (indPuntos >= 3) {
+        interpInd = 'CANDIDATA IDEAL A THM';
+        recFinal = 'Indicar THM sistémica. Evaluar idoneidad de tipo y vía según comorbilidades.';
+        if (document.getElementById('se-migrana')?.checked) recFinal += '\n* Paciente con Migraña con aura: Prescribir exclusivamente VÍA TRANSDÉRMICA.';
+        if (document.getElementById('se-osteo')?.checked) recFinal += '\n* Antecedente de Endometriosis/Adenomiosis: Utilizar esquema COMBINADO CONTINUO o DIU Mirena.';
+      }function switchTab(tab) {
+      const tabThm = document.getElementById('tab-thm');
+      const tabFsfi = document.getElementById('tab-fsfi');
+      const btnThm = document.getElementById('btn-tab-thm');
+      const btnFsfi = document.getElementById('btn-tab-fsfi');
 
-            const sudor = document.getElementById('sint-sudor').checked ? 'Sí' : 'No';
-            const noche = document.getElementById('sint-noche').checked ? 'Sí' : 'No';
-            const act = document.getElementById('sint-act').checked ? 'Sí' : 'No';
-            const ropa = document.getElementById('sint-ropa').checked ? 'Sí' : 'No';
+      if (!tabThm || !tabFsfi) return;
 
-            let absCount = 0; [...document.querySelectorAll('.cx-absoluta')].forEach(c => { if(c.checked) absCount++; });
-            const absText = absCount > 0 ? 'ALERTA: Contraindicación absoluta presente.' : 'Ninguna';
-            const relText = document.getElementById('cx-coronaria').checked ? 'Enfermedad coronaria activa (Evaluación por Cardiología)' : 'Ninguna';
+      if (tab === 'thm') {
+        tabThm.classList.remove('hidden');
+        tabFsfi.classList.add('hidden');
+        if (btnThm) btnThm.classList.add('active');
+        if (btnFsfi) btnFsfi.classList.remove('active');
+      } else {
+        tabFsfi.classList.remove('hidden');
+        tabThm.classList.add('hidden');
+        if (btnFsfi) btnFsfi.classList.add('active');
+        if (btnThm) btnThm.classList.remove('active');
+      }
+    }
 
-            let rCardio = 0; [...document.querySelectorAll('.rf-cardio')].forEach(c => { if(c.checked) rCardio += parseInt(c.value); });
-            let rTrombo = 0; [...document.querySelectorAll('.rf-trombo')].forEach(c => { if(c.checked) rTrombo += parseInt(c.value); });
-            let rMama = 0; [...document.querySelectorAll('.rf-mama')].forEach(c => { if(c.checked) rMama += parseInt(c.value); });
-            let rTotal = rCardio + rTrombo + rMama;
-            let interpRiesgo = rTotal <= 2 ? 'RIESGO BAJO' : (rTotal <= 5 ? 'RIESGO INTERMEDIO' : 'RIESGO ALTO');
+    let nombrePacienteGlobal = 'Paciente';
 
-            let sitEsp = []; [...document.querySelectorAll('.sit-esp')].forEach(c => { if(c.checked) sitEsp.push(c.value); });
-            let sitEspText = sitEsp.length > 0 ? sitEsp.join(', ') : 'Ninguna';
-            const pref = document.getElementById('preferencia').value;
+    function generarInformeApp() {
+      const nombre = document.getElementById('nombre')?.value || 'Paciente No Registrada';
+      nombrePacienteGlobal = nombre.replace(/ /g, '_');
+      const edad = parseInt(document.getElementById('edad')?.value) || '--';
+      const fur = document.getElementById('fur')?.value || 'No precisa';
+      const etapa = document.getElementById('etapa')?.value || '--';
 
-            let indPuntos = 0;
-            if (edad < 60 || etapa === 'Posmenopausia <10 años') indPuntos++;
-            if (totalMRS >= 9) indPuntos++;
-            if (bDia >= 3) indPuntos++;
-            if (bImp >= 4) indPuntos++;
-            if (absCount === 0) indPuntos++;
-            if (interpRiesgo === 'RIESGO BAJO' || interpRiesgo === 'RIESGO INTERMEDIO') indPuntos++;
-            if (document.getElementById('se-osteo').checked) indPuntos++;
-            if (document.getElementById('se-precoz').checked || (edad > 0 && edad < 40)) indPuntos++;
+      let somatico = 0; [...document.querySelectorAll('.mrs-s')].forEach(i => somatico += parseInt(i.value || 0));
+      let psicologico = 0; [...document.querySelectorAll('.mrs-p')].forEach(i => psicologico += parseInt(i.value || 0));
+      let urogenital = 0; [...document.querySelectorAll('.mrs-u')].forEach(i => urogenital += parseInt(i.value || 0));
+      const totalMRS = somatico + psicologico + urogenital;
 
-            let interpInd = 'NO HORMONAL';
-            let recFinal = 'Priorizar manejo no hormonal y modificaciones de estilo de vida.';
+      let absCount = 0;
+      [...document.querySelectorAll('.rx-absoluta')].forEach(r => { if (r.checked) absCount++; });
 
-            if (indPuntos >= 7) { interpInd = 'CANDIDATA IDEAL a THM'; recFinal = 'Indicar THM sistémica. Los beneficios superan ampliamente a los riesgos.'; }
-            else if (indPuntos >= 5) { interpInd = 'CANDIDATA CLARA a THM'; recFinal = 'Indicar THM. Evaluar idoneidad de tipo y vía según comorbilidades.'; }
-            else if (indPuntos >= 3) { interpInd = 'INDIVIDUALIZAR'; recFinal = 'Ponderar minuciosamente relación riesgo/beneficio con la paciente.'; }
+      let rCardio = 0; [...document.querySelectorAll('.rf-cardio')].forEach(c => { if (c.checked) rCardio += parseInt(c.value || 0); });
+      let rTrombo = 0; [...document.querySelectorAll('.rf-trombo')].forEach(r => { if (r.checked) rTrombo += parseInt(r.value || 0); });
+      let rMama = 0; [...document.querySelectorAll('.rf-mama')].forEach(c => { if (c.checked) rMama += parseInt(c.value || 0); });
+      const rTotal = rCardio + rTrombo + rMama;
 
-            if (absCount > 0) {
-                interpInd = 'NO HORMONAL (CONTRAINDICACIÓN ABSOLUTA)';
-                recFinal = 'CRÍTICO: THM Sistémica totalmente CONTRAINDICADA. Preferir alternativas no hormonales o estrógenos locales si se limita a síntomas genitourinarios.';
-            } else {
-                if (document.getElementById('se-migrana').checked) recFinal += '\\n* Paciente con Migraña con aura: Prescribir exclusivamente VÍA TRANSDÉRMICA.';
-                if (sitEsp.includes('Endometriosis') || sitEsp.includes('Adenomiosis')) recFinal += '\\n* Antecedente de Endometriosis/Adenomiosis: Utilizar ESQUEMA COMBINADO CONTINUO o DIU Mirena.';
-            }
+      let indPuntos = 0;
+      if (edad < 60 || etapa === 'Postmenopausia <10 años') indPuntos++;
+      if (totalMRS > 0) indPuntos++;
+      if (absCount === 0) indPuntos++;
+
+      let interpInd = 'SIN HORMONAL';
+      let recFinal = 'Priorizar manejo no hormonal y modificaciones de estilo de vida.';
+
+      if (absCount > 0) {
+        interpInd = 'NO HORMONAL (CONTRAINDICACIÓN ABSOLUTA)';
+        recFinal = 'CRÍTICO: THM Sistémica totalmente CONTRAINDICADA. Preferir alternativas no hormonales o estrógenos locales si se limita a los síntomas genitourinarios.';
+      } else if (indPuntos >= 3) {
+        interpInd = 'CANDIDATA IDEAL A THM';
+        recFinal = 'Indicar THM sistémica. Evaluar idoneidad de tipo y vía según comorbilidades.';
+        if (document.getElementById('se-migrana')?.checked) recFinal += '\n* Paciente con Migraña con aura: Prescribir exclusivamente VÍA TRANSDÉRMICA.';
+        if (document.getElementById('se-osteo')?.checked) recFinal += '\n* Antecedente de Endometriosis/Adenomiosis: Utilizar esquema COMBINADO CONTINUO o DIU Mirena.';
+      }
 
             const informeTexto = `
 ================================================================================
