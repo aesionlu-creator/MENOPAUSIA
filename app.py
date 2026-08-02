@@ -522,51 +522,78 @@ html_code = """
                 if (sitEsp.includes('Endometriosis') || sitEsp.includes('Adenomiosis')) recFinal += '\\n* Antecedente de Endometriosis/Adenomiosis: Utilizar ESQUEMA COMBINADO CONTINUO o DIU Mirena.';
             }
 
-            const informeTexto = `===========================================================
-INFORME DE EVALUACIÓN MENOPÁUSICA - Protocolo Ronald v2.0
-Desarrollo Clínico: Dr. Ronald | Motor: Gemini AI
-===========================================================
-Paciente: ${nombre} | Edad: ${edad} años | FUR: ${fur}
-Etapa: ${etapa}
+            const informeTexto = `
+<div style="font-family: Arial, sans-serif; padding: 25px; color: #1a252f; max-width: 800px; margin: auto;">
+  
+  <!-- ENCABEZADO -->
+  <div style="border-bottom: 3px solid #2c3e50; padding-bottom: 12px; margin-bottom: 20px; text-align: center;">
+    <h1 style="color: #2c3e50; margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Informe de Evaluación Menopáusica</h1>
+    <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 13px;">Protocolo Ronald v2.0 &bull; Desarrollo Clínico: Dr. Ronald &bull; Motor: Géminis AI</p>
+  </div>
 
-1. ESCALA MRS COMPLETA
-   Dominio Somático: ${somatico}/16 → ${interpS}
-   Dominio Psicológico: ${psicologico}/12 → ${interpP}
-   Dominio Urogenital: ${urogenital}/12 → ${interpU}
-   Puntaje TOTAL: ${totalMRS}/40 → ${interpTotalMRS}
+  <!-- DATOS DE LA PACIENTE -->
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px;">
+    <tr>
+      <td style="padding: 8px 12px;"><strong>Paciente:</strong> ${nombre}</td>
+      <td style="padding: 8px 12px;"><strong>Edad:</strong> ${edad} años</td>
+      <td style="padding: 8px 12px;"><strong>PIEL:</strong> ${piel}</td>
+    </tr>
+    <tr>
+      <td colspan="3" style="padding: 8px 12px; border-top: 1px solid #e9ecef;"><strong>Etapa:</strong> ${etapa}</td>
+    </tr>
+  </table>
 
-2. ANÁLISIS POR DOMINIO
-   ${domPred === 'Somático' ? '[X]' : '[ ]'} Somático predominante (${pctS}% del máx): ${domPred === 'Somático' ? analisisDom : 'No prevalente.'}
-   ${domPred === 'Psicológico' ? '[X]' : '[ ]'} Psicológico predominante (${pctP}% del máx): ${domPred === 'Psicológico' ? analisisDom : 'No prevalente.'}
-   ${domPred === 'Urogenital' ? '[X]' : '[ ]'} Urogenital predominante (${pctU}% del máx): ${domPred === 'Urogenital' ? analisisDom : 'No prevalente.'}
+  <!-- 1. ESCALA MRS COMPLETA -->
+  <h3 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 4px; margin-top: 15px; font-size: 15px;">1. ESCALA MRS COMPLETA</h3>
+  <ul style="line-height: 1.8; font-size: 13px; margin: 0; padding-left: 20px;">
+    <li><strong>Dominio Somático:</strong> ${somatico}/16 &rarr; <span style="color: #2980b9; font-weight: bold;">${interpS}</span></li>
+    <li><strong>Dominio Psicológico:</strong> ${psicologico}/12 &rarr; <span style="color: #2980b9; font-weight: bold;">${interpP}</span></li>
+    <li><strong>Dominio Urogenital:</strong> ${urogenital}/12 &rarr; <span style="color: #2980b9; font-weight: bold;">${interpU}</span></li>
+    <li style="margin-top: 4px; font-size: 14px;"><strong>PUNTAJE TOTAL:</strong> ${totalMRS}/40 &rarr; <span style="color: #c0392b; font-weight: bold;">${interpTotalMRS}</span></li>
+  </ul>
 
-3. BOCHORNOS
-   Episodios/día: ${bDia} | Impacto: ${bImp}/10 → ${interpImp}
-   Sudoración: ${sudor}              | Despierta por noche: ${noche}
-   Interrumpe actividades: ${act}  | Debe cambiarse de ropa: ${ropa}
+  <!-- 2. ANÁLISIS POR DOMINIO -->
+  <h3 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 4px; margin-top: 15px; font-size: 15px;">2. ANÁLISIS POR DOMINIO</h3>
+  <ul style="line-height: 1.6; font-size: 13px; list-style-type: none; padding-left: 5px; margin: 0;">
+    <li><strong>[ ${domPred === 'Somático' ? 'X' : ' '} ] Somático predominante:</strong> (${pctS}% del máx) &rarr; ${domPred === 'Somático' ? analisisDom : 'No prevalente.'}</li>
+    <li><strong>[ ${domPred === 'Psicológico' ? 'X' : ' '} ] Psicológico predominante:</strong> (${pctP}% del máx) &rarr; ${domPred === 'Psicológico' ? analisisDom : 'No prevalente.'}</li>
+    <li><strong>[ ${domPred === 'Urogenital' ? 'X' : ' '} ] Urogenital predominante:</strong> (${pctU}% del máx) &rarr; ${domPred === 'Urogenital' ? analisisDom : 'No prevalente.'}</li>
+  </ul>
 
-4. CONTRANDICACIONES
-   Absolutas: ${absText}
-   Relativas: ${relText}
+  <!-- 3. BOCHORNOS -->
+  <h3 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 4px; margin-top: 15px; font-size: 15px;">3. BOCHORNOS</h3>
+  <p style="font-size: 13px; margin: 4px 0;"><strong>Episodios/día:</strong> ${bDia} | <strong>Impacto:</strong> ${bImp}/10 &rarr; <strong>${interpImp}</strong></p>
+  <p style="font-size: 13px; margin: 4px 0;"><strong>Sudoración:</strong> ${sudor} | <strong>Despierta por noche:</strong> ${noche}</p>
+  <p style="font-size: 13px; margin: 4px 0;"><strong>Interrupción de actividades:</strong> ${act} | <strong>Debes cambiar de ropa:</strong> ${ropa}</p>
 
-5. RIESGOS PONDERADOS
-   Cardiovascular: ${rCardio} pts
-   Tromboembólico: ${rTrombo} pts
-   Cáncer mama: ${rMama} pts
-   RIESGO TOTAL: ${rTotal} pts → ${interpRiesgo}
+  <!-- 4. CONTRAINDICACIONES -->
+  <h3 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 4px; margin-top: 15px; font-size: 15px;">4. CONTRAINDICACIONES</h3>
+  <p style="font-size: 13px; margin: 4px 0;"><strong>Absolutas:</strong> ${absText}</p>
+  <p style="font-size: 13px; margin: 4px 0;"><strong>Relativas:</strong> ${relText}</p>
 
-6. SITUACIONES ESPECIALES
-   ${sitEspText}
+  <!-- 5. RIESGOS PONDERADOS -->
+  <h3 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 4px; margin-top: 15px; font-size: 15px;">5. RIESGOS PONDERADOS</h3>
+  <p style="font-size: 13px; margin: 4px 0;">Cardiovascular: ${rCardio} pts | Tromboembólico: ${rTrombo} pts | Cáncer mama: ${rMama} pts</p>
+  <p style="font-size: 13px; margin: 4px 0;"><strong>TOTAL RIESGO:</strong> ${rTotal} pts &rarr; <span style="color: #d35400; font-weight: bold;">${interpRiesgo}</span></p>
 
-7. PREFERENCIA DE LA PACIENTE
-   ${pref}
+  <!-- 6. SITUACIONES ESPECIALES -->
+  <h3 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 4px; margin-top: 15px; font-size: 15px;">6. SITUACIONES ESPECIALES</h3>
+  <p style="font-size: 13px; margin: 4px 0;">${sitEspText}</p>
 
-8. PUNTAJE DE INDICACIÓN (8 criterios)
-   Puntaje: ${indPuntos}/8 → ${interpInd}
-===========================================================
-RECOMENDACIÓN FINAL:
-${recFinal}
-===========================================================`;
+  <!-- 7. PREFERENCIA DE LA PACIENTE -->
+  <h3 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 4px; margin-top: 15px; font-size: 15px;">7. PREFERENCIA DE LA PACIENTE</h3>
+  <p style="font-size: 13px; margin: 4px 0;">${pref}</p>
+
+  <!-- 8. PUNTAJE DE INDICACIÓN Y RECOMENDACIÓN -->
+  <div style="margin-top: 20px; padding: 12px; background-color: #eaf2f8; border-left: 4px solid #2980b9; border-radius: 4px;">
+    <h3 style="color: #1b4f72; margin: 0 0 6px 0; font-size: 15px;">8. PUNTAJE DE INDICACIÓN (8 criterios)</h3>
+    <p style="font-size: 13px; margin: 0 0 8px 0;"><strong>Puntaje:</strong> ${indPuntos}/8 &rarr; <strong>${interpInd}</strong></p>
+    <h4 style="color: #1b4f72; margin: 8px 0 4px 0; font-size: 14px;">RECOMENDACIÓN FINAL:</h4>
+    <p style="font-size: 13px; margin: 0; font-weight: bold; color: #2c3e50;">${recFinal}</p>
+  </div>
+
+</div>
+`;
 
             document.getElementById('rawTextInforme').value = informeTexto;
             document.getElementById('pdfView').innerHTML = informeTexto.replace(/\\n/g, '<br>').replace(/ /g, '&nbsp;');
